@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-20",
+  "branch": "integration/workbench-2026-10-20",
+  "verified_source_commit": "c3d7a03814432e912c8b3180ba41262fb22c041b",
+  "source_baseline": "749bd0f86a07a28a86347d8ce9c141e601057c40",
+  "workbench_source": "dscodetesla/PLFM_RADAR-workbench@60bf8e6091a0db93ba0e52a6fbacf7a2e1355620",
+  "workbench_manifest": {
+    "files": 53,
+    "sha256_mismatches": 0
+  },
+  "patch": {
+    "checkpoint": "PLFM_RADAR_HF_Review_20261020_v2/changes.patch",
+    "git_apply_check": "PASS",
+    "applied": true
+  },
+  "checks": {
+    "git_diff_check": "PASS",
+    "manufacturing_unittest": {
+      "command": "python3 -m unittest discover -s tools/manufacturing/tests -v",
+      "result": "PASS",
+      "passed": 18
+    },
+    "full_pytest": {
+      "command": "python3 -m pytest -q",
+      "result": "BLOCKED_TOOL_MISSING",
+      "detail": "The host Python reports No module named pytest; historical workbench pytest log is retained separately and is not a rerun in this environment."
+    },
+    "manufacturing_audit": {
+      "command": "python3 tools/manufacturing/audit.py --output /tmp/plfm-import-audit-nonstrict.json",
+      "result": "FINDINGS",
+      "exit_code": 0,
+      "static_finding_count": 1,
+      "finding": "FPGA_CLOCK_PIN: clk_120m_dac / FPGA_DAC_CLOCK is PCB U42/C13 vs XDC D13"
+    },
+    "strict_audit": {
+      "command": "python3 tools/manufacturing/audit.py --strict --output /tmp/plfm-import-audit.json",
+      "result": "EXPECTED_BLOCK",
+      "exit_code": 1,
+      "reason": "The same one FPGA_CLOCK_PIN mismatch remains open."
+    },
+    "clock_contract": {
+      "command": "python3 tools/manufacturing/check_fpga_clocks.py",
+      "result": "EXPECTED_BLOCK",
+      "exit_code": 1,
+      "reason": "The same C13/D13 mismatch is correctly detected."
+    },
+    "native_eagle_erc_drc": "NOT_RUN",
+    "vivado_build_and_timing": "NOT_RUN",
+    "full_local_ci": "BLOCKED: required toolchain is not available in this host environment"
+  },
+  "readiness": "NOT_FOR_MANUFACTURE"
+}
