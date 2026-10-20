@@ -1,0 +1,33 @@
+{
+  "url": "https://download.amd.com/adaptive-socs-and-fpgas/developer/adaptive-socs-and-fpgas/package-pinout-files/a7packages/xc7a50tftg256pkg.txt",
+  "source_sha256": "d8e5adf7c2104e244489db15113bd8c3c18130a024236ed63f7e8e5a02392452",
+  "header": "Device/Package xc7a50tftg256 10/4/2013 09:35:44",
+  "facts": {
+    "C13": {
+      "pin_name": "IO_L12N_T1_MRCC_15",
+      "bank": "15",
+      "io_type": "HR"
+    },
+    "D13": {
+      "pin_name": "IO_L12P_T1_MRCC_15",
+      "bank": "15",
+      "io_type": "HR"
+    },
+    "C4": {
+      "pin_name": "IO_L12N_T1_MRCC_35",
+      "bank": "35",
+      "io_type": "HR"
+    },
+    "D4": {
+      "pin_name": "IO_L12P_T1_MRCC_35",
+      "bank": "35",
+      "io_type": "HR"
+    },
+    "E12": {
+      "pin_name": "IO_L13P_T2_MRCC_15",
+      "bank": "15",
+      "io_type": "HR"
+    }
+  },
+  "limitation": "Pin-class data, not implementation timing or RF proof"
+}

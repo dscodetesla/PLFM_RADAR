@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "configuration": "AERIS-10N Nexus four-board recovery",
+  "source_commit": "749bd0f86a07a28a86347d8ce9c141e601057c40",
+  "working_branch": "fix/hf-manufacturing-audit-20261020",
+  "readiness": "NOT_FOR_MANUFACTURE",
+  "remote_changes": false,
+  "completed": [
+    "BOM cardinality repairs",
+    "DNP CPL cleanup",
+    "deterministic audit and regression tests",
+    "HF manufacturer GAP report",
+    "Power X36 schematic recovery with unchanged PCB",
+    "All four boards saved pad/net parity",
+    "Five-clock XDC/PCB check and 50T fail-fast preflight"
+  ],
+  "open": [
+    "Native ERC/DRC review of recovered Power X36",
+    "DAC clock C13/D13 mismatch",
+    "XTAL3 fit/load review",
+    "native ERC/DRC and FPGA build",
+    "per-board stackup approval",
+    "complete local CI"
+  ],
+  "next_action": "Native MainBoard clock ECO review (C13/D13 and C4/D4), Bank14 electrical closure; provide approved toolchain and run full CI before commit",
+  "evidence": "docs/manufacturing/EMPIRICAL_UNBLOCK.md"
+}

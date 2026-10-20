@@ -1,0 +1,48 @@
+[
+  {
+    "file": "Gerber_Main_Board/BOM_Main_Board.xlsx",
+    "value_changes": [
+      {
+        "sheet": "Feuil1",
+        "cell": "A13",
+        "before": 75,
+        "after": 73
+      },
+      {
+        "sheet": "Feuil1",
+        "cell": "A15",
+        "before": 6,
+        "after": 8
+      },
+      {
+        "sheet": "Feuil1",
+        "cell": "E15",
+        "before": "C277, C278, C295, C297, C299, C301, C352, C352",
+        "after": "C277, C278, C295, C297, C299, C301, C352, C353"
+      }
+    ],
+    "scope_check": "PASS"
+  },
+  {
+    "file": "Gerber_Patch_Antenna/BOM_Patch_Antenna.xlsx",
+    "value_changes": [
+      {
+        "sheet": "Feuil1",
+        "cell": "A2",
+        "before": 11,
+        "after": 16
+      }
+    ],
+    "scope_check": "PASS"
+  },
+  {
+    "file": "Gerber_Main_Board/CPL.xlsx",
+    "removed_refs": [
+      "SJ1",
+      "U$2",
+      "U$3"
+    ],
+    "remaining_rows_unchanged": true,
+    "scope_check": "PASS"
+  }
+]

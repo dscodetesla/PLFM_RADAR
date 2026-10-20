@@ -1,0 +1,63 @@
+{
+  "date_local": "2026-10-20",
+  "timezone": "Europe/Kyiv",
+  "source_commit": "749bd0f86a07a28a86347d8ce9c141e601057c40",
+  "worktree_branch": "fix/hf-manufacturing-audit-20261020",
+  "commit_created": false,
+  "pushed": false,
+  "manufacturing_unittest": {
+    "status": "PASS",
+    "tests": 10
+  },
+  "python_all_discovery": {
+    "status": "PASS_WITH_SKIPS",
+    "passed": 220,
+    "skipped": 9,
+    "warnings": 2
+  },
+  "mcu_host_tests": {
+    "status": "PASS",
+    "executable_suites": 24,
+    "hardware_test": false
+  },
+  "fpga_regression": {
+    "status": "BLOCKED",
+    "exit_code": 1,
+    "reason": "iverilog not installed"
+  },
+  "ruff": {
+    "status": "BLOCKED",
+    "exit_code": 1,
+    "reason": "No module named ruff"
+  },
+  "native_eagle_erc_drc": {
+    "status": "NOT_RUN",
+    "reason": "No EAGLE runtime"
+  },
+  "native_vivado": {
+    "status": "NOT_RUN",
+    "reason": "No Vivado runtime"
+  },
+  "strict_inventory": {
+    "status": "FAIL",
+    "exit_code": 1,
+    "finding": "Power X36 exists only on PCB"
+  },
+  "factory_approval": {
+    "status": "NOT_OBTAINED"
+  },
+  "physical_bringup": {
+    "status": "NOT_RUN"
+  },
+  "policy_gate": "CONTRIBUTING.md requires complete local CI before commit; sfw absent; no dependency installation attempted",
+  "readiness": "NOT_FOR_MANUFACTURE",
+  "independent_review": {
+    "status": "PASS_FOR_REVIEW_SCOPE",
+    "initial_findings": [
+      "Missing CPL membership validation",
+      "Missing CPL schema/numeric validation"
+    ],
+    "fixes_verified": true,
+    "review_scope": "Inventory repair and audit implementation; not native hardware/factory approval"
+  }
+}

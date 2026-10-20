@@ -1,0 +1,41 @@
+{
+  "source_commit": "749bd0f86a07a28a86347d8ce9c141e601057c40",
+  "readiness": "NOT_FOR_MANUFACTURE",
+  "manufacturing_unittest": {
+    "passed": 18,
+    "review_regression": "alternative get_ports, semicolon comment and unsupported PACKAGE_PIN: RED then GREEN"
+  },
+  "pytest": {
+    "passed": 228,
+    "skipped": 9,
+    "warnings": 2,
+    "subtests_passed": 17,
+    "exit_code": 0,
+    "summary": "228 passed, 9 skipped, 2 warnings, 17 subtests passed in 4.94s"
+  },
+  "strict_audit": {
+    "exit_code": 1,
+    "finding": "FPGA_CLOCK_PIN: clk_120m_dac C13 board / D13 XDC"
+  },
+  "tcl_preflight": {
+    "runtime": "Python tkinter.Tcl",
+    "result": "expected mismatch error before Vivado commands",
+    "native_vivado": false
+  },
+  "native_eagle": "NOT_RUN",
+  "native_vivado": "NOT_RUN",
+  "ci_tools": "ruff/Icarus/sfw absent locally and in PATH of 3 online Linux hosts",
+  "dependency_installs": false,
+  "remote_writes": false,
+  "commit_push_pr": false,
+  "independent_review": {
+    "result": "one important parser false-pass found; fixed with RED/GREEN regressions, full available suite green",
+    "other_important_findings": 0,
+    "scope": "source-level static changes; native validation not available"
+  },
+  "code_sha256": {
+    "tools/manufacturing/audit.py": "be97d6e3d7d089545274384d5f31a05d7e811f0c06518b309af98109f723bfe6",
+    "tools/manufacturing/check_fpga_clocks.py": "6d8d01dadbd58d08e677c4018abf0874b6358ea1646c8f14570d273c2eadf845",
+    "9_Firmware/9_2_FPGA/scripts/50t/build_50t.tcl": "b28e2db6402513d9d05773173428a187b216377c646cc77ab17a83c9e2477786"
+  }
+}

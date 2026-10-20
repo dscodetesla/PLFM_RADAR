@@ -1,0 +1,16 @@
+....................................s................................... [ 30%]
+...........................................sss.......................... [ 60%]
+.......................s..........................................ssss.. [ 91%]
+.....................                                   [100%]
+=============================== warnings summary ===============================
+9_Firmware/tests/cross_layer/test_cross_layer_contract.py::TestTier2Adar1000VmTableGroundTruth::test_firmware_vm_i_matches_datasheet
+9_Firmware/tests/cross_layer/test_cross_layer_contract.py::TestTier3CStub::test_default_values_round_trip
+  /root/.local/lib/python3.12/site-packages/_pytest/fixtures.py:1313: PytestRemovedIn10Warning: Class-scoped fixture defined as instance method is deprecated.
+  Instance attributes set in this fixture will NOT be visible to test methods,
+  as each test gets a new instance while the fixture runs only once per class.
+  Use @classmethod decorator and set attributes on cls instead.
+  See https://docs.pytest.org/en/stable/deprecations.html#class-scoped-fixture-as-instance-method
+    fixturefunc = resolve_fixture_function(fixturedef, request)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+228 passed, 9 skipped, 2 warnings, 17 subtests passed in 4.94s
