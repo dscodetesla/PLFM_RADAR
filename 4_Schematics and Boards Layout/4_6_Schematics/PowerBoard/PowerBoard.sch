@@ -10609,6 +10609,7 @@ W = angled&lt;p&gt;
 <part name="GND248" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="X35" library="con-molex" library_urn="urn:adsk.eagle:library:165" deviceset="22-23-2021" device="" package3d_urn="urn:adsk.eagle:package:8078633/1"/>
 <part name="GND249" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
+<part name="X36" library="con-molex" library_urn="urn:adsk.eagle:library:165" deviceset="22-23-2021" device="" package3d_urn="urn:adsk.eagle:package:8078633/1"/>
 </parts>
 <sheets>
 <sheet>
@@ -15968,6 +15969,40 @@ W = angled&lt;p&gt;
 <wire x1="784.86" y1="287.02" x2="800.1" y2="287.02" width="0.1524" layer="91"/>
 <pinref part="X35" gate="-1" pin="S"/>
 <wire x1="800.1" y1="287.02" x2="800.1" y2="281.94" width="0.1524" layer="91"/>
+</segment>
+</net>
+</nets>
+</sheet>
+<sheet>
+<description>X36 +5V0_LO output connector, synchronized with existing PCB</description>
+<plain>
+<text x="25.4" y="66.04" size="2.54" layer="97">X36 - existing PCB output connector</text>
+<text x="25.4" y="60.96" size="1.778" layer="97">Pad 1: +5V0_LO; pad 2: GND</text>
+</plain>
+<instances>
+<instance part="X36" gate="-1" x="50.8" y="50.8" smashed="yes">
+<attribute name="NAME" x="53.34" y="50.038" size="1.524" layer="95"/>
+<attribute name="VALUE" x="50.038" y="52.197" size="1.778" layer="96"/>
+</instance>
+<instance part="X36" gate="-2" x="50.8" y="43.18" smashed="yes">
+<attribute name="NAME" x="53.34" y="42.418" size="1.524" layer="95"/>
+</instance>
+</instances>
+<busses>
+</busses>
+<nets>
+<net name="+5V0_LO" class="0">
+<segment>
+<pinref part="X36" gate="-1" pin="S"/>
+<wire x1="35.56" y1="50.8" x2="48.26" y2="50.8" width="0.1524" layer="91"/>
+<label x="35.56" y="50.8" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="GND" class="0">
+<segment>
+<pinref part="X36" gate="-2" pin="S"/>
+<wire x1="35.56" y1="43.18" x2="48.26" y2="43.18" width="0.1524" layer="91"/>
+<label x="35.56" y="43.18" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>

@@ -1,0 +1,34 @@
+name: Manufacturing inventory audit (not fabrication approval)
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Audit logic and actual BOM/CPL regressions
+        run: python -m unittest discover -s tools/manufacturing/tests -v
+      - name: Collect current findings and input hashes
+        if: always()
+        run: python tools/manufacturing/audit.py --output manufacturing-audit.json
+      - name: Strict static inventory gate (manual run)
+        if: github.event_name == 'workflow_dispatch'
+        run: python tools/manufacturing/audit.py --strict --output manufacturing-audit.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manufacturing-inventory-${{ github.sha }}
+          path: manufacturing-audit.json
+          if-no-files-found: error

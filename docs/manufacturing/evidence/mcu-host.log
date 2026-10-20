@@ -1,0 +1,784 @@
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries -c stm32_hal_mock.c -o stm32_hal_mock.o
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries -c ad_driver_mock.c -o ad_driver_mock.o
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries -c ../9_1_1_C_Cpp_Libraries/adf4382a_manager.c -o adf4382a_manager.o
+In file included from ../9_1_1_C_Cpp_Libraries/adf4382a_manager.c:3:
+../9_1_1_C_Cpp_Libraries/adf4382a_manager.c: In function ‘ADF4382A_TriggerTimedSync’:
+../9_1_1_C_Cpp_Libraries/adf4382a_manager.c:313:51: warning: operand of ‘?:’ changes signedness from ‘int’ to ‘SyncMethod’ due to unsignedness of other operand [-Wsign-compare]
+  313 |                  manager ? manager->sync_method : -1);
+      |                                                   ^~
+../9_1_1_C_Cpp_Libraries/diag_log.h:59:52: note: in definition of macro ‘DIAG_ERR’
+   59 |            (unsigned long)HAL_GetTick(), subsys, ##__VA_ARGS__)
+      |                                                    ^~~~~~~~~~~
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries test_bug1_timed_sync_init_ordering.c stm32_hal_mock.o ad_driver_mock.o adf4382a_manager.o -o test_bug1_timed_sync_init_ordering
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries test_bug3_timed_sync_noop.c stm32_hal_mock.o ad_driver_mock.o adf4382a_manager.o -o test_bug3_timed_sync_noop
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries test_bug4_phase_shift_before_check.c stm32_hal_mock.o ad_driver_mock.o adf4382a_manager.o -o test_bug4_phase_shift_before_check
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries test_bug5_fine_phase_gpio_only.c stm32_hal_mock.o ad_driver_mock.o adf4382a_manager.o -o test_bug5_fine_phase_gpio_only
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries test_bug9_platform_ops_null.c stm32_hal_mock.o ad_driver_mock.o adf4382a_manager.o -o test_bug9_platform_ops_null
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries test_bug10_spi_cs_not_toggled.c stm32_hal_mock.o ad_driver_mock.o adf4382a_manager.o -o test_bug10_spi_cs_not_toggled
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries test_bug15_htim3_dangling_extern.c stm32_hal_mock.o ad_driver_mock.o adf4382a_manager.o -o test_bug15_htim3_dangling_extern
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries test_bug2_ad9523_double_setup.c stm32_hal_mock.o ad_driver_mock.o -o test_bug2_ad9523_double_setup
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries test_bug6_timer_variable_collision.c stm32_hal_mock.o ad_driver_mock.o -o test_bug6_timer_variable_collision
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries test_bug7_gpio_pin_conflict.c stm32_hal_mock.o ad_driver_mock.o -o test_bug7_gpio_pin_conflict
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -I. test_bug8_uart_commented_out.c -o test_bug8_uart_commented_out
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries test_bug14_diag_section_args.c stm32_hal_mock.o ad_driver_mock.o -o test_bug14_diag_section_args
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries test_gap3_emergency_stop_rails.c stm32_hal_mock.o ad_driver_mock.o -o test_gap3_emergency_stop_rails
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 test_bug12_pa_cal_loop_inverted.c -lm -o test_bug12_pa_cal_loop_inverted
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 test_bug13_dac2_adc_buffer_mismatch.c -lm -o test_bug13_dac2_adc_buffer_mismatch
+test_bug13_dac2_adc_buffer_mismatch.c: In function ‘main’:
+test_bug13_dac2_adc_buffer_mismatch.c:68:17: warning: variable ‘bug_adc1’ set but not used [-Wunused-but-set-variable]
+   68 |         uint8_t bug_adc1[8] = {0};
+      |                 ^~~~~~~~
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 test_gap3_iwdg_config.c -lm -o test_gap3_iwdg_config
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 test_gap3_temperature_max.c -lm -o test_gap3_temperature_max
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 test_gap3_idq_periodic_reread.c -lm -o test_gap3_idq_periodic_reread
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 test_gap3_emergency_state_ordering.c -o test_gap3_emergency_state_ordering
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 test_gap3_overtemp_emergency_stop.c -o test_gap3_overtemp_emergency_stop
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 test_gap3_health_watchdog_cold_start.c -o test_gap3_health_watchdog_cold_start
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries -c ../9_1_1_C_Cpp_Libraries/platform_noos_stm32.c -o platform_noos_stm32.o
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries test_bug11_platform_spi_transmit_only.c stm32_hal_mock.o ad_driver_mock.o platform_noos_stm32.o -o test_bug11_platform_spi_transmit_only
+c++ -std=c++17 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries -c ../9_1_1_C_Cpp_Libraries/ADAR1000_AGC.cpp -o ADAR1000_AGC.o
+c++ -std=c++17 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries -c ../9_1_1_C_Cpp_Libraries/ADAR1000_Manager.cpp -o ADAR1000_Manager.o
+c++ -std=c++17 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries test_agc_outer_loop.cpp ADAR1000_AGC.o ADAR1000_Manager.o stm32_hal_mock.o ad_driver_mock.o -o test_agc_outer_loop
+cc -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0 -Ishims -I. -I../9_1_1_C_Cpp_Libraries -I../9_1_3_C_Cpp_Code test_um982_gps.c stm32_hal_mock.o ad_driver_mock.o -lm -o test_um982_gps
+===============================================
+  Running all 24 bug tests...
+===============================================
+--- Running test_bug1_timed_sync_init_ordering ---
+=== Bug #1 (FIXED): Timed sync init ordering ===
+[      0 ms] ======== ADF4382A LO MANAGER INIT ========
+[      0 ms] LO: Init called with sync_method=1 (TIMED)
+[      0 ms] LO: Manager struct zeroed, initialized=false
+[      0 ms] LO: SPI4 params: TX_CS=0x4000 RX_CS=0x0400 speed=10000000 Hz platform_ops=0x55cd21f28da0
+[      0 ms] LO: TX target: 10500000000 Hz, ref=300000000 Hz, cp_i=3, bleed=1000
+[      0 ms] LO: RX target: 10380000000 Hz, ref=300000000 Hz, cp_i=4, bleed=1200
+[      0 ms] LO: Asserting CE pins (TX + RX)...
+[      0 ms] LO: CE pins asserted, waited 1 ms
+[      0 ms] LO: DELADJ/DELSTR pins initialized to LOW
+[      0 ms] LO: --- TX ADF4382A init (10.5 GHz) ---
+Initializing TX ADF4382A (10.5 GHz) on SPI4...
+[      0 ms] LO: TX adf4382_init() returned 0 (took 0 ms)
+[      0 ms] LO: TX init OK, dev_ptr=0x55cd21f31b20
+[      0 ms] LO: 5 ms inter-device delay complete
+[      0 ms] LO: --- RX ADF4382A init (10.38 GHz) ---
+Initializing RX ADF4382A (10.38 GHz) on SPI4...
+[      0 ms] LO: RX adf4382_init() returned 0 (took 0 ms)
+[      0 ms] LO: RX init OK, dev_ptr=0x55cd21f31b50
+[      0 ms] LO: Setting output power (both ch0=12, ch1=12)...
+[      0 ms] LO: Enabling outputs: TX_ch0=ON TX_ch1=OFF, RX_ch0=ON RX_ch1=OFF
+[      0 ms] LO: manager->initialized set to true (before sync setup)
+[      0 ms] LO: About to call sync setup -- manager->initialized=true
+[      0 ms] LO: SetupTimedSync called, manager=0x7ffec7097670 initialized=true
+Setting up Timed Synchronization (60 MHz SYNCP/SYNCN)...
+[      0 ms] LO: TX adf4382_set_timed_sync_setup() returned 0
+[      0 ms] LO: RX adf4382_set_timed_sync_setup() returned 0
+Timed synchronization configured for 60 MHz SYNCP/SYNCN
+[      0 ms] LO: Timed sync setup complete for both TX and RX
+[      0 ms] LO: ADF4382A_SetupTimedSync() returned 0
+ADF4382A Manager initialized with TIMED synchronization on SPI4
+[      0 ms] LO: Total Manager_Init took 0 ms
+[      0 ms] LO: Init returning OK (sync setup successful)
+  Manager_Init returned: 0 (expected 0=OK)
+  PASS: Init returned OK
+  SPY_ADF4382_SET_TIMED_SYNC records: 2 (expected 2 — TX + RX)
+  PASS: Timed sync configured for both TX and RX during init
+  PASS: manager->initialized == true
+[      0 ms] ======== ADF4382A LO MANAGER INIT ========
+[      0 ms] LO: Init called with sync_method=1 (TIMED)
+[      0 ms] LO: Manager struct zeroed, initialized=false
+[      0 ms] LO: SPI4 params: TX_CS=0x4000 RX_CS=0x0400 speed=10000000 Hz platform_ops=0x55cd21f28da0
+[      0 ms] LO: TX target: 10500000000 Hz, ref=300000000 Hz, cp_i=3, bleed=1000
+[      0 ms] LO: RX target: 10380000000 Hz, ref=300000000 Hz, cp_i=4, bleed=1200
+[      0 ms] LO: Asserting CE pins (TX + RX)...
+[      0 ms] LO: CE pins asserted, waited 1 ms
+[      0 ms] LO: DELADJ/DELSTR pins initialized to LOW
+[      0 ms] LO: --- TX ADF4382A init (10.5 GHz) ---
+Initializing TX ADF4382A (10.5 GHz) on SPI4...
+[      0 ms] LO: TX adf4382_init() returned 0 (took 0 ms)
+[      0 ms] LO: TX init OK, dev_ptr=0x55cd21f31b80
+[      0 ms] LO: 5 ms inter-device delay complete
+[      0 ms] LO: --- RX ADF4382A init (10.38 GHz) ---
+Initializing RX ADF4382A (10.38 GHz) on SPI4...
+[      0 ms] LO: RX adf4382_init() returned 0 (took 0 ms)
+[      0 ms] LO: RX init OK, dev_ptr=0x55cd21f31bb0
+[      0 ms] LO: Setting output power (both ch0=12, ch1=12)...
+[      0 ms] LO: Enabling outputs: TX_ch0=ON TX_ch1=OFF, RX_ch0=ON RX_ch1=OFF
+[      0 ms] LO: manager->initialized set to true (before sync setup)
+[      0 ms] LO: About to call sync setup -- manager->initialized=true
+[      0 ms] LO: SetupTimedSync called, manager=0x7ffec7097670 initialized=true
+Setting up Timed Synchronization (60 MHz SYNCP/SYNCN)...
+[      0 ms] LO: TX adf4382_set_timed_sync_setup() returned -1
+[      0 ms] LO **ERR**: TX timed sync register write FAILED: -1
+TX timed sync setup failed: -1
+[      0 ms] LO: ADF4382A_SetupTimedSync() returned -1
+[      0 ms] LO **ERR**: Timed sync setup FAILED: -1
+Timed sync setup failed: -1
+  Manager_Init with failing sync: -1 (expected non-zero)
+  PASS: Init fails when sync setup fails (error no longer swallowed)
+  PASS: manager->initialized == false after sync failure
+=== Bug #1 (FIXED): ALL TESTS PASSED ===
+
+--- Running test_bug3_timed_sync_noop ---
+=== Bug #3 (FIXED): TriggerTimedSync now issues hw actions ===
+[      0 ms] ======== ADF4382A LO MANAGER INIT ========
+[      0 ms] LO: Init called with sync_method=1 (TIMED)
+[      0 ms] LO: Manager struct zeroed, initialized=false
+[      0 ms] LO: SPI4 params: TX_CS=0x4000 RX_CS=0x0400 speed=10000000 Hz platform_ops=0x55967ac6bda0
+[      0 ms] LO: TX target: 10500000000 Hz, ref=300000000 Hz, cp_i=3, bleed=1000
+[      0 ms] LO: RX target: 10380000000 Hz, ref=300000000 Hz, cp_i=4, bleed=1200
+[      0 ms] LO: Asserting CE pins (TX + RX)...
+[      0 ms] LO: CE pins asserted, waited 1 ms
+[      0 ms] LO: DELADJ/DELSTR pins initialized to LOW
+[      0 ms] LO: --- TX ADF4382A init (10.5 GHz) ---
+Initializing TX ADF4382A (10.5 GHz) on SPI4...
+[      0 ms] LO: TX adf4382_init() returned 0 (took 0 ms)
+[      0 ms] LO: TX init OK, dev_ptr=0x55967ac74b20
+[      0 ms] LO: 5 ms inter-device delay complete
+[      0 ms] LO: --- RX ADF4382A init (10.38 GHz) ---
+Initializing RX ADF4382A (10.38 GHz) on SPI4...
+[      0 ms] LO: RX adf4382_init() returned 0 (took 0 ms)
+[      0 ms] LO: RX init OK, dev_ptr=0x55967ac74b50
+[      0 ms] LO: Setting output power (both ch0=12, ch1=12)...
+[      0 ms] LO: Enabling outputs: TX_ch0=ON TX_ch1=OFF, RX_ch0=ON RX_ch1=OFF
+[      0 ms] LO: manager->initialized set to true (before sync setup)
+[      0 ms] LO: About to call sync setup -- manager->initialized=true
+[      0 ms] LO: SetupTimedSync called, manager=0x7fff238654f0 initialized=true
+Setting up Timed Synchronization (60 MHz SYNCP/SYNCN)...
+[      0 ms] LO: TX adf4382_set_timed_sync_setup() returned 0
+[      0 ms] LO: RX adf4382_set_timed_sync_setup() returned 0
+Timed synchronization configured for 60 MHz SYNCP/SYNCN
+[      0 ms] LO: Timed sync setup complete for both TX and RX
+[      0 ms] LO: ADF4382A_SetupTimedSync() returned 0
+ADF4382A Manager initialized with TIMED synchronization on SPI4
+[      0 ms] LO: Total Manager_Init took 0 ms
+[      0 ms] LO: Init returning OK (sync setup successful)
+[      0 ms] LO: Triggering timed sync via sw_sync pulse (SYNCP/SYNCN must be present)...
+Timed sync triggered via sw_sync pulse
+[      0 ms] LO: Timed sync trigger complete (sw_sync set + 10us + clear)
+  TriggerTimedSync returned: 0 (expected 0=OK)
+  SPY_ADF4382_SET_SW_SYNC records: 4 (expected 4)
+  PASS: TriggerTimedSync issues 4 SPI sw_sync calls
+
+  Checking sw_sync call ordering:
+    sw_sync[0]: dev=TX value=1  OK (TX set)
+    sw_sync[1]: dev=RX value=1  OK (RX set)
+    sw_sync[2]: dev=TX value=0  OK (TX clear)
+    sw_sync[3]: dev=RX value=0  OK (RX clear)
+  PASS: Ordering is correct (set TX, set RX, clear TX, clear RX)
+[      0 ms] LO: Triggering EZSync via SPI...
+EZSync triggered via SPI
+[      0 ms] LO: EZSync trigger complete (set + 10us + clear)
+
+  EZSync sw_sync count: 4 (expected 4, same as timed sync)
+  PASS: Both sync methods now issue the same hw trigger pattern
+[      0 ms] LO: Manager deinit starting...
+ADF4382A Manager deinitialized
+[      0 ms] LO: Manager deinit complete
+
+=== Bug #3: ALL TESTS PASSED (post-fix) ===
+
+--- Running test_bug4_phase_shift_before_check ---
+=== Bug #4 (FIXED): Phase shift after init check ===
+[      0 ms] ======== ADF4382A LO MANAGER INIT ========
+[      0 ms] LO: Init called with sync_method=1 (TIMED)
+[      0 ms] LO: Manager struct zeroed, initialized=false
+[      0 ms] LO: SPI4 params: TX_CS=0x4000 RX_CS=0x0400 speed=10000000 Hz platform_ops=0x5652d5ee0da0
+[      0 ms] LO: TX target: 10500000000 Hz, ref=300000000 Hz, cp_i=3, bleed=1000
+[      0 ms] LO: RX target: 10380000000 Hz, ref=300000000 Hz, cp_i=4, bleed=1200
+[      0 ms] LO: Asserting CE pins (TX + RX)...
+[      0 ms] LO: CE pins asserted, waited 1 ms
+[      0 ms] LO: DELADJ/DELSTR pins initialized to LOW
+[      0 ms] LO: --- TX ADF4382A init (10.5 GHz) ---
+Initializing TX ADF4382A (10.5 GHz) on SPI4...
+[      0 ms] LO: TX adf4382_init() returned 0 (took 0 ms)
+[      0 ms] LO: TX init OK, dev_ptr=0x5652d5ee9ba0
+[      0 ms] LO: 5 ms inter-device delay complete
+[      0 ms] LO: --- RX ADF4382A init (10.38 GHz) ---
+Initializing RX ADF4382A (10.38 GHz) on SPI4...
+[      0 ms] LO: RX adf4382_init() returned 0 (took 0 ms)
+[      0 ms] LO: RX init OK, dev_ptr=0x5652d5ee9bd0
+[      0 ms] LO: Setting output power (both ch0=12, ch1=12)...
+[      0 ms] LO: Enabling outputs: TX_ch0=ON TX_ch1=OFF, RX_ch0=ON RX_ch1=OFF
+[      0 ms] LO: manager->initialized set to true (before sync setup)
+[      0 ms] LO: About to call sync setup -- manager->initialized=true
+[      0 ms] LO: SetupTimedSync called, manager=0x7fff307c6ef0 initialized=true
+Setting up Timed Synchronization (60 MHz SYNCP/SYNCN)...
+[      0 ms] LO: TX adf4382_set_timed_sync_setup() returned 0
+[      0 ms] LO: RX adf4382_set_timed_sync_setup() returned 0
+Timed synchronization configured for 60 MHz SYNCP/SYNCN
+[      0 ms] LO: Timed sync setup complete for both TX and RX
+[      0 ms] LO: ADF4382A_SetupTimedSync() returned 0
+ADF4382A Manager initialized with TIMED synchronization on SPI4
+[      0 ms] LO: Total Manager_Init took 0 ms
+[      0 ms] LO: Init returning OK (sync setup successful)
+[      0 ms] LO: SetPhaseShift: TX=500 ps, RX=500 ps
+[      0 ms] LO: TX phase: 500 ps -> duty_cycle=50/1000 (TIM3 CH2 PWM)
+[      0 ms] LO: Dev0 DELADJ PWM started: duty=50/1000 (5.0%)
+Device 0 DELADJ duty cycle set to 50/1000
+[      0 ms] LO: RX phase: 500 ps -> duty_cycle=50/1000 (TIM3 CH3 PWM)
+[      0 ms] LO: Dev1 DELADJ PWM started: duty=50/1000 (5.0%)
+Device 1 DELADJ duty cycle set to 50/1000
+Phase shift set: TX=500 ps, RX=500 ps
+[      0 ms] LO: Dev0 DELSTR strobe (10 us pulse)
+Device 0 phase shift strobed
+[      0 ms] LO: Dev1 DELSTR strobe (10 us pulse)
+Device 1 phase shift strobed
+  PASS: Successful init — phase shift called after error check
+  ADF4382_INIT calls: 2 (expected 2: TX+RX)
+  GPIO writes: 10 (includes CE, DELADJ, DELSTR, phase)
+  PASS: Phase shift GPIO writes observed
+[      0 ms] LO: Manager deinit starting...
+ADF4382A Manager deinitialized
+[      0 ms] LO: Manager deinit complete
+
+  Testing with failed TX init...
+[      0 ms] ======== ADF4382A LO MANAGER INIT ========
+[      0 ms] LO: Init called with sync_method=1 (TIMED)
+[      0 ms] LO: Manager struct zeroed, initialized=false
+[      0 ms] LO: SPI4 params: TX_CS=0x4000 RX_CS=0x0400 speed=10000000 Hz platform_ops=0x5652d5ee0da0
+[      0 ms] LO: TX target: 10500000000 Hz, ref=300000000 Hz, cp_i=3, bleed=1000
+[      0 ms] LO: RX target: 10380000000 Hz, ref=300000000 Hz, cp_i=4, bleed=1200
+[      0 ms] LO: Asserting CE pins (TX + RX)...
+[      0 ms] LO: CE pins asserted, waited 1 ms
+[      0 ms] LO: DELADJ/DELSTR pins initialized to LOW
+[      0 ms] LO: --- TX ADF4382A init (10.5 GHz) ---
+Initializing TX ADF4382A (10.5 GHz) on SPI4...
+[      0 ms] LO: TX adf4382_init() returned -1 (took 0 ms)
+[      0 ms] LO **ERR**: TX init FAILED: -1 -- disabling CE pins
+TX ADF4382A initialization failed: -1
+  PASS: Error_Handler called, phase shift NOT called (FIXED)
+  Phase shift no longer executes on uninitialized manager
+=== Bug #4 (FIXED): ALL TESTS PASSED ===
+
+--- Running test_bug5_fine_phase_gpio_only ---
+=== Bug #5 (FIXED): SetFinePhaseShift uses TIM PWM ===
+[      0 ms] ======== ADF4382A LO MANAGER INIT ========
+[      0 ms] LO: Init called with sync_method=1 (TIMED)
+[      0 ms] LO: Manager struct zeroed, initialized=false
+[      0 ms] LO: SPI4 params: TX_CS=0x4000 RX_CS=0x0400 speed=10000000 Hz platform_ops=0x559a71d66da0
+[      0 ms] LO: TX target: 10500000000 Hz, ref=300000000 Hz, cp_i=3, bleed=1000
+[      0 ms] LO: RX target: 10380000000 Hz, ref=300000000 Hz, cp_i=4, bleed=1200
+[      0 ms] LO: Asserting CE pins (TX + RX)...
+[      0 ms] LO: CE pins asserted, waited 1 ms
+[      0 ms] LO: DELADJ/DELSTR pins initialized to LOW
+[      0 ms] LO: --- TX ADF4382A init (10.5 GHz) ---
+Initializing TX ADF4382A (10.5 GHz) on SPI4...
+[      0 ms] LO: TX adf4382_init() returned 0 (took 0 ms)
+[      0 ms] LO: TX init OK, dev_ptr=0x559a71d6fb20
+[      0 ms] LO: 5 ms inter-device delay complete
+[      0 ms] LO: --- RX ADF4382A init (10.38 GHz) ---
+Initializing RX ADF4382A (10.38 GHz) on SPI4...
+[      0 ms] LO: RX adf4382_init() returned 0 (took 0 ms)
+[      0 ms] LO: RX init OK, dev_ptr=0x559a71d6fb50
+[      0 ms] LO: Setting output power (both ch0=12, ch1=12)...
+[      0 ms] LO: Enabling outputs: TX_ch0=ON TX_ch1=OFF, RX_ch0=ON RX_ch1=OFF
+[      0 ms] LO: manager->initialized set to true (before sync setup)
+[      0 ms] LO: About to call sync setup -- manager->initialized=true
+[      0 ms] LO: SetupTimedSync called, manager=0x7ffe366f6de0 initialized=true
+Setting up Timed Synchronization (60 MHz SYNCP/SYNCN)...
+[      0 ms] LO: TX adf4382_set_timed_sync_setup() returned 0
+[      0 ms] LO: RX adf4382_set_timed_sync_setup() returned 0
+Timed synchronization configured for 60 MHz SYNCP/SYNCN
+[      0 ms] LO: Timed sync setup complete for both TX and RX
+[      0 ms] LO: ADF4382A_SetupTimedSync() returned 0
+ADF4382A Manager initialized with TIMED synchronization on SPI4
+[      0 ms] LO: Total Manager_Init took 0 ms
+[      0 ms] LO: Init returning OK (sync setup successful)
+[      0 ms] LO: Dev0 DELADJ=LOW (duty=0, PWM stopped)
+Device 0 DELADJ duty cycle set to 0/1000
+  duty=0: PWM_STOP=1 GPIO_WRITE=1
+  PASS: duty=0 → PWM stopped + GPIO LOW
+[      0 ms] LO: Dev0 DELADJ=HIGH (duty=max, PWM stopped)
+Device 0 DELADJ duty cycle set to 1000/1000
+  duty=MAX(1000): PWM_STOP=1 GPIO_WRITE=1
+  PASS: duty=MAX → PWM stopped + GPIO HIGH
+[      0 ms] LO: Dev0 DELADJ PWM started: duty=500/1000 (50.0%)
+Device 0 DELADJ duty cycle set to 500/1000
+  duty=500: PWM_START=1 SET_COMPARE=1 GPIO_WRITE=0
+  SET_COMPARE value=500 (expected 500)
+  PWM_START channel=0x04 (expected 0x04 = TIM_CHANNEL_2)
+  PASS: duty=500 → TIM PWM with correct compare value
+[      0 ms] LO: Dev1 DELADJ PWM started: duty=750/1000 (75.0%)
+Device 1 DELADJ duty cycle set to 750/1000
+  RX PWM_START channel=0x08 (expected 0x08 = TIM_CHANNEL_3)
+  RX SET_COMPARE value=750 (expected 750)  OK
+  PASS: RX device uses TIM_CHANNEL_3 with correct compare
+[      0 ms] LO: Manager deinit starting...
+ADF4382A Manager deinitialized
+[      0 ms] LO: Manager deinit complete
+
+=== Bug #5: ALL TESTS PASSED (post-fix) ===
+
+--- Running test_bug9_platform_ops_null ---
+=== Bug #9 (FIXED): platform_ops was NULL ===
+[      0 ms] ======== ADF4382A LO MANAGER INIT ========
+[      0 ms] LO: Init called with sync_method=1 (TIMED)
+[      0 ms] LO: Manager struct zeroed, initialized=false
+[      0 ms] LO: SPI4 params: TX_CS=0x4000 RX_CS=0x0400 speed=10000000 Hz platform_ops=0x55630801bda0
+[      0 ms] LO: TX target: 10500000000 Hz, ref=300000000 Hz, cp_i=3, bleed=1000
+[      0 ms] LO: RX target: 10380000000 Hz, ref=300000000 Hz, cp_i=4, bleed=1200
+[      0 ms] LO: Asserting CE pins (TX + RX)...
+[      0 ms] LO: CE pins asserted, waited 1 ms
+[      0 ms] LO: DELADJ/DELSTR pins initialized to LOW
+[      0 ms] LO: --- TX ADF4382A init (10.5 GHz) ---
+Initializing TX ADF4382A (10.5 GHz) on SPI4...
+[      0 ms] LO: TX adf4382_init() returned 0 (took 0 ms)
+[      0 ms] LO: TX init OK, dev_ptr=0x556308024b20
+[      0 ms] LO: 5 ms inter-device delay complete
+[      0 ms] LO: --- RX ADF4382A init (10.38 GHz) ---
+Initializing RX ADF4382A (10.38 GHz) on SPI4...
+[      0 ms] LO: RX adf4382_init() returned 0 (took 0 ms)
+[      0 ms] LO: RX init OK, dev_ptr=0x556308024b50
+[      0 ms] LO: Setting output power (both ch0=12, ch1=12)...
+[      0 ms] LO: Enabling outputs: TX_ch0=ON TX_ch1=OFF, RX_ch0=ON RX_ch1=OFF
+[      0 ms] LO: manager->initialized set to true (before sync setup)
+[      0 ms] LO: About to call sync setup -- manager->initialized=true
+[      0 ms] LO: SetupTimedSync called, manager=0x7ffd23fd8d70 initialized=true
+Setting up Timed Synchronization (60 MHz SYNCP/SYNCN)...
+[      0 ms] LO: TX adf4382_set_timed_sync_setup() returned 0
+[      0 ms] LO: RX adf4382_set_timed_sync_setup() returned 0
+Timed synchronization configured for 60 MHz SYNCP/SYNCN
+[      0 ms] LO: Timed sync setup complete for both TX and RX
+[      0 ms] LO: ADF4382A_SetupTimedSync() returned 0
+ADF4382A Manager initialized with TIMED synchronization on SPI4
+[      0 ms] LO: Total Manager_Init took 0 ms
+[      0 ms] LO: Init returning OK (sync setup successful)
+  Manager_Init returned: 0 (expected 0=OK)
+  PASS: Init returned OK
+  spi_tx_param.platform_ops = 0x55630801bda0 (expected non-NULL)
+  PASS: TX platform_ops is non-NULL
+  spi_rx_param.platform_ops = 0x55630801bda0 (expected non-NULL)
+  PASS: RX platform_ops is non-NULL
+  &stm32_spi_ops = 0x55630801bda0
+  PASS: TX platform_ops == &stm32_spi_ops
+  PASS: RX platform_ops == &stm32_spi_ops
+[      0 ms] LO: Manager deinit starting...
+ADF4382A Manager deinitialized
+[      0 ms] LO: Manager deinit complete
+=== Bug #9 (FIXED): ALL TESTS PASSED ===
+
+--- Running test_bug10_spi_cs_not_toggled ---
+=== Bug #10 (FIXED): SPI CS not toggled ===
+[      0 ms] ======== ADF4382A LO MANAGER INIT ========
+[      0 ms] LO: Init called with sync_method=1 (TIMED)
+[      0 ms] LO: Manager struct zeroed, initialized=false
+[      0 ms] LO: SPI4 params: TX_CS=0x4000 RX_CS=0x0400 speed=10000000 Hz platform_ops=0x55a15a478da0
+[      0 ms] LO: TX target: 10500000000 Hz, ref=300000000 Hz, cp_i=3, bleed=1000
+[      0 ms] LO: RX target: 10380000000 Hz, ref=300000000 Hz, cp_i=4, bleed=1200
+[      0 ms] LO: Asserting CE pins (TX + RX)...
+[      0 ms] LO: CE pins asserted, waited 1 ms
+[      0 ms] LO: DELADJ/DELSTR pins initialized to LOW
+[      0 ms] LO: --- TX ADF4382A init (10.5 GHz) ---
+Initializing TX ADF4382A (10.5 GHz) on SPI4...
+[      0 ms] LO: TX adf4382_init() returned 0 (took 0 ms)
+[      0 ms] LO: TX init OK, dev_ptr=0x55a15a481b20
+[      0 ms] LO: 5 ms inter-device delay complete
+[      0 ms] LO: --- RX ADF4382A init (10.38 GHz) ---
+Initializing RX ADF4382A (10.38 GHz) on SPI4...
+[      0 ms] LO: RX adf4382_init() returned 0 (took 0 ms)
+[      0 ms] LO: RX init OK, dev_ptr=0x55a15a481b50
+[      0 ms] LO: Setting output power (both ch0=12, ch1=12)...
+[      0 ms] LO: Enabling outputs: TX_ch0=ON TX_ch1=OFF, RX_ch0=ON RX_ch1=OFF
+[      0 ms] LO: manager->initialized set to true (before sync setup)
+[      0 ms] LO: About to call sync setup -- manager->initialized=true
+[      0 ms] LO: SetupTimedSync called, manager=0x7fff57082830 initialized=true
+Setting up Timed Synchronization (60 MHz SYNCP/SYNCN)...
+[      0 ms] LO: TX adf4382_set_timed_sync_setup() returned 0
+[      0 ms] LO: RX adf4382_set_timed_sync_setup() returned 0
+Timed synchronization configured for 60 MHz SYNCP/SYNCN
+[      0 ms] LO: Timed sync setup complete for both TX and RX
+[      0 ms] LO: ADF4382A_SetupTimedSync() returned 0
+ADF4382A Manager initialized with TIMED synchronization on SPI4
+[      0 ms] LO: Total Manager_Init took 0 ms
+[      0 ms] LO: Init returning OK (sync setup successful)
+  Manager_Init returned: 0 (expected 0=OK)
+  PASS: Init returned OK
+  spi_tx_param.extra = 0x55a15a481c90 (expected non-NULL)
+  PASS: TX extra is non-NULL
+  TX cs_port = 0x55a15a479028 (expected GPIOG = 0x55a15a479028)
+  PASS: TX cs_port == GPIOG
+  TX cs_pin = 0x4000 (expected TX_CS_Pin = 0x4000)
+  PASS: TX cs_pin == TX_CS_Pin (GPIO_PIN_14)
+  TX hspi = 0x55a15a479030 (expected &hspi4 = 0x55a15a479030)
+  PASS: TX hspi == &hspi4
+  spi_rx_param.extra = 0x55a15a481cb0 (expected non-NULL)
+  PASS: RX extra is non-NULL
+  RX cs_port = 0x55a15a479028 (expected GPIOG = 0x55a15a479028)
+  PASS: RX cs_port == GPIOG
+  RX cs_pin = 0x0400 (expected RX_CS_Pin = 0x0400)
+  PASS: RX cs_pin == RX_CS_Pin (GPIO_PIN_10)
+  RX hspi = 0x55a15a479030 (expected &hspi4 = 0x55a15a479030)
+  PASS: RX hspi == &hspi4
+  TX extra = 0x55a15a481c90, RX extra = 0x55a15a481cb0 (expected different)
+  PASS: TX and RX have separate stm32_spi_extra instances
+  PASS: TX and RX CS pins differ (individual addressing)
+[      0 ms] LO: Manager deinit starting...
+ADF4382A Manager deinitialized
+[      0 ms] LO: Manager deinit complete
+=== Bug #10 (FIXED): ALL TESTS PASSED ===
+
+--- Running test_bug15_htim3_dangling_extern ---
+=== Bug #15 (FIXED): htim3 defined + TIM3 PWM configured ===
+  Test 1: htim3 is defined (id=3)... PASS
+[      0 ms] ======== ADF4382A LO MANAGER INIT ========
+[      0 ms] LO: Init called with sync_method=1 (TIMED)
+[      0 ms] LO: Manager struct zeroed, initialized=false
+[      0 ms] LO: SPI4 params: TX_CS=0x4000 RX_CS=0x0400 speed=10000000 Hz platform_ops=0x56293d6fcda0
+[      0 ms] LO: TX target: 10500000000 Hz, ref=300000000 Hz, cp_i=3, bleed=1000
+[      0 ms] LO: RX target: 10380000000 Hz, ref=300000000 Hz, cp_i=4, bleed=1200
+[      0 ms] LO: Asserting CE pins (TX + RX)...
+[      0 ms] LO: CE pins asserted, waited 1 ms
+[      0 ms] LO: DELADJ/DELSTR pins initialized to LOW
+[      0 ms] LO: --- TX ADF4382A init (10.5 GHz) ---
+Initializing TX ADF4382A (10.5 GHz) on SPI4...
+[      0 ms] LO: TX adf4382_init() returned 0 (took 0 ms)
+[      0 ms] LO: TX init OK, dev_ptr=0x56293d705b20
+[      0 ms] LO: 5 ms inter-device delay complete
+[      0 ms] LO: --- RX ADF4382A init (10.38 GHz) ---
+Initializing RX ADF4382A (10.38 GHz) on SPI4...
+[      0 ms] LO: RX adf4382_init() returned 0 (took 0 ms)
+[      0 ms] LO: RX init OK, dev_ptr=0x56293d705b50
+[      0 ms] LO: Setting output power (both ch0=12, ch1=12)...
+[      0 ms] LO: Enabling outputs: TX_ch0=ON TX_ch1=OFF, RX_ch0=ON RX_ch1=OFF
+[      0 ms] LO: manager->initialized set to true (before sync setup)
+[      0 ms] LO: About to call sync setup -- manager->initialized=true
+[      0 ms] LO: SetupTimedSync called, manager=0x7ffdb0abab80 initialized=true
+Setting up Timed Synchronization (60 MHz SYNCP/SYNCN)...
+[      0 ms] LO: TX adf4382_set_timed_sync_setup() returned 0
+[      0 ms] LO: RX adf4382_set_timed_sync_setup() returned 0
+Timed synchronization configured for 60 MHz SYNCP/SYNCN
+[      0 ms] LO: Timed sync setup complete for both TX and RX
+[      0 ms] LO: ADF4382A_SetupTimedSync() returned 0
+ADF4382A Manager initialized with TIMED synchronization on SPI4
+[      0 ms] LO: Total Manager_Init took 0 ms
+[      0 ms] LO: Init returning OK (sync setup successful)
+  Test 2: Manager init OK
+[      0 ms] LO: Dev0 DELADJ PWM started: duty=500/1000 (50.0%)
+Device 0 DELADJ duty cycle set to 500/1000
+  Test 3: TX duty=500 → PWM_START=1 SET_COMPARE=1... timer_id=3 (htim3) PASS
+[      0 ms] LO: Dev1 DELADJ PWM started: duty=300/1000 (30.0%)
+Device 1 DELADJ duty cycle set to 300/1000
+  Test 4: RX duty=300 → channel=0x08 (expected 0x08=CH3) timer_id=3... PASS
+[      0 ms] LO: Dev0 DELADJ=LOW (duty=0, PWM stopped)
+Device 0 DELADJ duty cycle set to 0/1000
+  Test 5: duty=0 → PWM_STOP=1... PASS
+[      0 ms] LO: Manager deinit starting...
+ADF4382A Manager deinitialized
+[      0 ms] LO: Manager deinit complete
+
+=== Bug #15: ALL TESTS PASSED (post-fix) ===
+
+--- Running test_bug2_ad9523_double_setup ---
+=== Bug #2 (FIXED): AD9523 single setup call ===
+  SPY_AD9523_SETUP records: 1 (expected 1)
+  PASS: ad9523_setup() called exactly once
+  Reset release at spy index 1, setup at 4
+  PASS: Reset released BEFORE setup call (correct order)
+=== Bug #2 (FIXED): ALL TESTS PASSED ===
+
+--- Running test_bug6_timer_variable_collision ---
+=== Bug #6 (FIXED): Timer variable collision ===
+  t=0ms: lock_fired=0 temp_fired=0
+  PASS: Neither fires at t=0
+  t=5001ms: lock_fired=1 temp_fired=1
+  PASS: Both fire at t=5001
+  After first fire: last_check=5001 last_check1=5001
+  PASS: Both timers updated independently
+  t=5002ms: lock_fired=1 temp_fired=1
+  PASS: Neither fires at t=5002 (correct — temp no longer runs continuously)
+  t=10002ms: lock_fired=2 temp_fired=2
+  PASS: Both fire at t=10002 (second cycle, independent)
+  PASS: Both timers at 10002, no cross-contamination
+  PASS: Third cycle fires correctly at t=15003
+=== Bug #6 (FIXED): ALL TESTS PASSED ===
+
+--- Running test_bug7_gpio_pin_conflict ---
+=== Bug #7 (FIXED): GPIO pin mapping — verify CubeMX match ===
+
+  RX pin verification:
+    RX_LKDET_Pin  = 0x0040  expected 0x0040 (GPIO_PIN_6)  OK
+    RX_DELADJ_Pin = 0x0080  expected 0x0080 (GPIO_PIN_7)  OK
+    RX_DELSTR_Pin = 0x0100  expected 0x0100 (GPIO_PIN_8)  OK
+    RX_CE_Pin     = 0x0200  expected 0x0200 (GPIO_PIN_9)  OK
+    RX_CS_Pin     = 0x0400  expected 0x0400 (GPIO_PIN_10) OK
+
+  TX pin verification:
+    TX_LKDET_Pin  = 0x0800  expected 0x0800 (GPIO_PIN_11) OK
+    TX_DELSTR_Pin = 0x1000  expected 0x1000 (GPIO_PIN_12) OK
+    TX_DELADJ_Pin = 0x2000  expected 0x2000 (GPIO_PIN_13) OK
+    TX_CS_Pin     = 0x4000  expected 0x4000 (GPIO_PIN_14) OK
+    TX_CE_Pin     = 0x8000  expected 0x8000 (GPIO_PIN_15) OK
+
+  PA/clock enable conflict check:
+    ADF4382 pin mask:    0xFFC0
+    PA/CLK enable mask:  0x003F
+    Overlap:             0x0000  OK (no conflicts)
+
+  Pin uniqueness check:
+    All 10 pins are unique  OK
+
+  Port verification:
+    All pins on GPIOG  OK
+
+=== Bug #7: ALL TESTS PASSED (post-fix) ===
+
+--- Running test_bug8_uart_commented_out ---
+=== Bug #8 (FIXED): uart_print/uart_println uncommented ===
+  Read 112140 bytes from main.cpp
+  Found uart_print signature at offset 40669
+  uart_print is inside block comment: NO
+  PASS: uart_print is NOT commented out (FIXED)
+  Found uart_println signature at offset 40794
+  uart_println is inside block comment: NO
+  PASS: uart_println is NOT commented out (FIXED)
+=== Bug #8 (FIXED): ALL TESTS PASSED ===
+
+--- Running test_bug14_diag_section_args ---
+=== Bug #14 (FIXED): DIAG_SECTION macro arg count ===
+  Test 1: DIAG_SECTION with 1-arg form compiles... PASS
+  Test 2: DIAG_SECTION produces output (not a no-op)... PASS
+  Test 3: Original 1-arg call (SYSTEM INIT)... PASS
+  Test 4: DIAG/DIAG_WARN/DIAG_ERR alongside DIAG_SECTION... PASS
+
+=== Bug #14: ALL TESTS PASSED (post-fix) ===
+
+--- Running test_gap3_emergency_stop_rails ---
+=== Gap-3 Fix 1: Emergency_Stop() PA rail shutdown ===
+  Test 1: GPIO sequence correctness... PASS
+  Test 2: TX mixers disabled before PA rails... PASS (by ordering in Test 1)
+  Test 3: Pin define cross-check... PASS
+
+=== Gap-3 Fix 1: ALL TESTS PASSED ===
+
+--- Running test_bug12_pa_cal_loop_inverted ---
+=== Bug #12 (FIXED): PA calibration loop condition ===
+  Test 1: Idq=0.500A (far from 1.680A), DAC=100 → CONTINUE (correct)
+  Test 2: Idq=1.600A (within 0.2A of 1.680A), DAC=80 → EXIT (correct)
+  Test 3: Idq=1.680A (exactly at target), DAC=60 → EXIT (correct)
+  Test 4: Idq=0.200A (far), DAC=38 → EXIT (DAC limit, correct)
+  Test 5: Idq=1.479A (|diff|=0.201), DAC=50 → CONTINUE (correct)
+  Test 6: Idq=1.481A (|diff|=0.199), DAC=50 → EXIT (correct)
+  Test 7: Full loop simulation... converged at DAC=58 Idq=1.520A after 17 iterations → PASS
+
+=== Bug #12: ALL TESTS PASSED (post-fix) ===
+
+--- Running test_bug13_dac2_adc_buffer_mismatch ---
+=== Bug #13 (FIXED): DAC2 ADC buffer mismatch ===
+  measured_value=200, adc2_readings[3]=200
+  Idq=10.352941, expected=10.352941
+  PASS: adc2_readings[3] == measured_value (200)
+  PASS: adc1_readings[3] unchanged (stale=42)
+  PASS: Idq calculation uses adc2_readings (correct buffer)
+  Buggy Idq=5.125 (from stale val=99), Fixed Idq=10.353 (from measured=200)
+  PASS: buggy value differs from correct value
+
+=== Bug #13: ALL TESTS PASSED (post-fix) ===
+
+--- Running test_gap3_iwdg_config ---
+=== Gap-3 Fix 2: IWDG hardware watchdog configuration ===
+  Test 1: IWDG timeout within 3-5 seconds... (calculated 4.000 s) PASS
+  Test 2: OCXO loop refresh interval < IWDG timeout... (1.0 s < 4.0 s) PASS
+  Test 3: Emergency_Stop refresh interval < IWDG timeout... (0.1 s < 4.0 s) PASS
+  Test 4: Main loop must complete within timeout... (est. 1.0 s < 4.0 s) PASS
+  Test 5: Prescaler is valid STM32F7 IWDG value... PASS
+  Test 6: Reload value within 12-bit range (0-4095)... (500) PASS
+
+=== Gap-3 Fix 2: ALL TESTS PASSED ===
+
+--- Running test_gap3_temperature_max ---
+=== Gap-3 Fix 3: temperature = max(Temperature_1..8) ===
+  Test 1: Max in middle position... 80.0 PASS
+  Test 2: Max at index 0... 90.0 PASS
+  Test 3: Max at index 7... 85.5 PASS
+  Test 4: All equal... 42.0 PASS
+  Test 5: Overtemp detection at 75.1C... 75.1 > 75.0 → OVERTEMP DETECTED, PASS
+  Test 6: Normal temp (all below 75C)... 74.9 <= 75.0 → OK, PASS
+  Test 7: ADC scaling: raw=116 → 75.1°C... (75.06°C) PASS
+
+=== Gap-3 Fix 3: ALL TESTS PASSED ===
+
+--- Running test_gap3_idq_periodic_reread ---
+=== Gap-3 Fix 4: Periodic IDQ re-read ===
+  Test 1: raw=0 → Idq=0.000A (bias fault)... PASS
+  Test 2: raw=33 → Idq≈1.709A (normal)... (1.708A) PASS
+  Test 3: raw=255 → Idq≈13.2A (overcurrent)... (13.200A) PASS
+  Test 4: raw=48 → just below 2.5A... (2.485A) PASS
+  Test 5: raw=2 → just above 0.1A... (0.104A) PASS
+  Test 6: Formula consistency across channels... PASS
+  Test 7: Single-channel overcurrent detection... (ch7=3.0A) PASS
+
+=== Gap-3 Fix 4: ALL TESTS PASSED ===
+
+--- Running test_gap3_emergency_state_ordering ---
+=== Gap-3 Fix 5: system_emergency_state ordering ===
+  Test 1: PA overcurrent path... PASS
+  Test 2: Power supply fault path... PASS
+  Test 3: PA bias fault path... PASS
+  Test 4: Overtemp triggers e-stop... PASS
+  Test 5: Watchdog timeout triggers e-stop... PASS
+  Test 6: Non-critical error (no e-stop)... PASS
+  Test 7: ERROR_NONE (no action)... PASS
+
+=== Gap-3 Fix 5: ALL 7 TESTS PASSED ===
+
+--- Running test_gap3_overtemp_emergency_stop ---
+=== Safety fix: overtemp / watchdog -> Emergency_Stop() ===
+  Test 1: ERROR_RF_PA_OVERCURRENT triggers... PASS
+  Test 2: ERROR_RF_PA_BIAS triggers... PASS
+  Test 3: ERROR_STEPPER_MOTOR triggers... PASS
+  Test 4: ERROR_FPGA_COMM triggers... PASS
+  Test 5: ERROR_POWER_SUPPLY triggers... PASS
+  Test 6: ERROR_TEMPERATURE_HIGH triggers (regression)... PASS
+  Test 7: ERROR_WATCHDOG_TIMEOUT triggers (regression)... PASS
+  Test 8: ERROR_NONE does not trigger... PASS
+  Test 9: ERROR_AD9523_CLOCK does not trigger... PASS
+  Test 10: ERROR_ADF4382_TX_UNLOCK does not trigger (recoverable)... PASS
+  Test 11: ERROR_ADAR1000_COMM does not trigger... PASS
+  Test 12: ERROR_IMU_COMM does not trigger... PASS
+  Test 13: ERROR_GPS_COMM does not trigger... PASS
+  Test 14: ERROR_MEMORY_ALLOC does not trigger... PASS
+
+=== Safety fix: ALL TESTS PASSED ===
+
+--- Running test_gap3_health_watchdog_cold_start ---
+=== Safety fix: checkSystemHealth() watchdog cold-start + stale-ts ===
+  Test 1: first call at t=75000 ms (post-init) does not trip... PASS
+  Test 2: first call at t=600000 ms still does not trip... PASS
+  Test 3: 1000 calls at 10 ms intervals never trip... PASS
+  Test 4: 70 s of 100 ms-spaced calls after seed do not trip... PASS
+  Test 5: real 60+ s gap between calls does trip... PASS
+  Test 6: exactly 60000 ms gap does not trip (boundary)... PASS
+  Test 7: after a genuine stall+trip, next paced call does not re-trip... PASS
+  Test 8: tick wrap from 0xFFFFFF00 -> 0x00000064 (200 ms span) does not trip... PASS
+
+=== Safety fix: ALL TESTS PASSED ===
+
+--- Running test_bug11_platform_spi_transmit_only ---
+[Bug #11] platform_spi_write_and_read uses TransmitReceive
+[Bug #11] PASSED
+--- Running test_agc_outer_loop ---
+=== ADAR1000_AGC Outer-Loop Unit Tests ===
+  [ 1] test_defaults                                           PASS
+  [ 2] test_saturation_reduces_gain                            [      0 ms] AGC: SAT detected -- gain_base -> 26  (events=1)
+PASS
+  [ 3] test_holdoff_prevents_early_gain_up                     [      0 ms] AGC: SAT detected -- gain_base -> 26  (events=1)
+PASS
+  [ 4] test_recovery_after_holdoff                             [      0 ms] AGC: SAT detected -- gain_base -> 26  (events=1)
+[      0 ms] AGC: Recovery step -- gain_base -> 27
+PASS
+  [ 5] test_min_gain_clamp                                     [      0 ms] AGC: SAT detected -- gain_base -> 10  (events=1)
+[      0 ms] AGC: SAT detected -- gain_base -> 10  (events=2)
+PASS
+  [ 6] test_max_gain_clamp                                     [      0 ms] AGC: Recovery step -- gain_base -> 32
+[      0 ms] AGC: Recovery step -- gain_base -> 32
+PASS
+  [ 7] test_calibration_offsets                                PASS
+  [ 8] test_disabled_noop                                      PASS
+  [ 9] test_apply_gain_spi                                     PASS
+  [10] test_reset_preserves_config                             [      0 ms] AGC: SAT detected -- gain_base -> 34  (events=1)
+[      0 ms] AGC: SAT detected -- gain_base -> 26  (events=2)
+PASS
+  [11] test_saturation_counter                                 [      0 ms] AGC: SAT detected -- gain_base -> 26  (events=1)
+[      0 ms] AGC: SAT detected -- gain_base -> 22  (events=2)
+[      0 ms] AGC: SAT detected -- gain_base -> 18  (events=3)
+[      0 ms] AGC: SAT detected -- gain_base -> 14  (events=4)
+[      0 ms] AGC: SAT detected -- gain_base -> 10  (events=5)
+[      0 ms] AGC: SAT detected -- gain_base -> 6  (events=6)
+[      0 ms] AGC: SAT detected -- gain_base -> 2  (events=7)
+[      0 ms] AGC: SAT detected -- gain_base -> 0  (events=8)
+[      0 ms] AGC: SAT detected -- gain_base -> 0  (events=9)
+[      0 ms] AGC: SAT detected -- gain_base -> 0  (events=10)
+[      0 ms] AGC: Recovery step -- gain_base -> 1
+PASS
+  [12] test_mixed_sequence                                     [      0 ms] AGC: SAT detected -- gain_base -> 26  (events=1)
+[      0 ms] AGC: SAT detected -- gain_base -> 22  (events=2)
+[      0 ms] AGC: Recovery step -- gain_base -> 23
+[      0 ms] AGC: Recovery step -- gain_base -> 24
+PASS
+  [13] test_effective_gain_edge_cases                          PASS
+=== Results: 13/13 passed ===
+--- Running test_um982_gps ---
+=== UM982 GPS Driver Tests ===
+
+--- Checksum ---
+  [TEST] checksum: valid GGA                                     PASS
+  [TEST] checksum: valid THS                                     PASS
+  [TEST] checksum: invalid (wrong value)                         PASS
+  [TEST] checksum: missing * marker                              PASS
+  [TEST] checksum: NULL input                                    PASS
+  [TEST] checksum: missing $ prefix                              PASS
+
+--- Coordinate Parsing ---
+  [TEST] coord: latitude 4404.14036 N                            PASS
+  [TEST] coord: latitude 3358.92500 S (negative)                 PASS
+  [TEST] coord: longitude 12118.85961 W (3-digit degrees)        PASS
+  [TEST] coord: longitude 11614.19729 E                          PASS
+  [TEST] coord: empty string returns NAN                         PASS
+  [TEST] coord: NULL returns NAN                                 PASS
+  [TEST] coord: no decimal point returns NAN                     PASS
+
+--- GGA Parsing ---
+  [TEST] GGA: full sentence with all fields                      PASS
+  [TEST] GGA: RTK fixed (quality=4)                              PASS
+  [TEST] GGA: no fix (quality=0)                                 PASS
+
+--- RMC Parsing ---
+  [TEST] RMC: valid position and speed                           PASS
+  [TEST] RMC: void status (no valid fix)                         PASS
+
+--- THS Parsing ---
+  [TEST] THS: autonomous heading 341.3344                        PASS
+  [TEST] THS: not valid mode                                     PASS
+  [TEST] THS: heading exactly 0.0000                             PASS
+  [TEST] THS: heading near 360                                   PASS
+
+--- VTG Parsing ---
+  [TEST] VTG: course and speed                                   PASS
+
+--- Talker IDs ---
+  [TEST] talker: GP prefix parses correctly                      PASS
+  [TEST] talker: GL prefix parses correctly                      PASS
+
+--- Feed / Line Assembly ---
+  [TEST] feed: single complete sentence with CRLF                PASS
+  [TEST] feed: multiple sentences in one chunk                   PASS
+  [TEST] feed: partial bytes then complete                       PASS
+  [TEST] feed: bad checksum sentence is rejected                 PASS
+  [TEST] feed: VERSIONA response sets flag                       PASS
+
+--- Validity / Age ---
+  [TEST] validity: heading valid within timeout                  PASS
+  [TEST] validity: heading invalid after 2s timeout              PASS
+  [TEST] validity: heading invalid with mode V                   PASS
+  [TEST] validity: position valid with fix quality 1             PASS
+  [TEST] validity: position invalid with no fix                  PASS
+  [TEST] age: position age uses last valid fix, not no-fix GGA   PASS
+  [TEST] age: heading age computed correctly                     PASS
+
+--- Send Command ---
+  [TEST] send_command: appends \r\n                              PASS
+  [TEST] send_command: NULL gps returns false                    PASS
+
+--- Init Sequence ---
+  [TEST] init: sends correct command sequence                    PASS
+  [TEST] init: baseline=0 skips LENGTH command                   PASS
+  [TEST] init: fails if no VERSIONA response                     PASS
+  [TEST] init state: supported NMEA traffic sets initialized     PASS
+
+--- Edge Cases ---
+  [TEST] edge: GGA with empty lat/lon fields                     PASS
+  [TEST] edge: sentence too short to have formatter              PASS
+  [TEST] edge: oversized line is dropped                         PASS
+  [TEST] process: reads from mock UART RX buffer                 PASS
+
+--- PR #68 Regression ---
+  [TEST] regression: GN-prefixed GGA is correctly identified     PASS
+  [TEST] regression: 3-digit longitude degrees parsed correctly  PASS
+  [TEST] regression: hemisphere parsing doesn't corrupt field pointer PASS
+  [TEST] regression: RMC sentence is actually parsed (not dead code) PASS
+
+===============================================
+  Results: 51 passed, 0 failed (of 51 total)
+===============================================
+===============================================
+  Results: 24 passed, 0 failed (of 24 total)
+===============================================

@@ -15,6 +15,18 @@ set rtl_dir         $project_root
 set fpga_part       "xc7a50tftg256-2"
 set top_module      "radar_system_top_50t"
 
+# Check saved physical clock pin assignments before creating/overwriting outputs.
+# Python stdlib only. A passing check is not DRC, timing or fabrication approval.
+set repository_root [file normalize [file join $project_root "../.."]]
+set clock_check [file join $repository_root "tools/manufacturing/check_fpga_clocks.py"]
+set python_cmd [auto_execok python3]
+if {$python_cmd eq ""} { set python_cmd [auto_execok python] }
+if {$python_cmd eq ""} { error "Python 3 required for MainBoard clock preflight" }
+if {[catch {exec {*}$python_cmd $clock_check 2>@1} clock_result]} {
+    error "MainBoard clock preflight FAILED; resolve CAD/XDC mismatch.\n$clock_result"
+}
+puts $clock_result
+
 puts "================================================================"
 puts "  AERIS-10 — XC7A50T Production Build"
 puts "  Target:    $fpga_part"

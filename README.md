@@ -157,7 +157,12 @@ To keep the repository root clean and make artifacts easy to find, place generat
 
 ### Hardware Assembly
 
-1. **Order PCBs**: Production outputs are under `/4_Schematics and Boards Layout/4_7_Production Files`
+Manufacturing status for this fork: **NOT_FOR_MANUFACTURE**. Read the
+[current empirical recovery report](docs/manufacturing/EMPIRICAL_UNBLOCK.md) and its dated evidence
+before submitting a board. Existing CAM files and passing software tests do not
+constitute native CAD validation or factory approval of this revision.
+
+1. **Review PCB outputs**: Existing, unapproved production outputs are under `/4_Schematics and Boards Layout/4_7_Production Files`
 2. **Source Components**: BOM/CPL files are co-located under `/4_Schematics and Boards Layout/4_7_Production Files`
 3. **Assembly**: Use the schematics in `/4_Schematics and Boards Layout/4_6_Schematics` together with the production outputs above; a standalone assembly guide is not currently tracked
 4. **Antenna**: Choose appropriate array files for your target variant

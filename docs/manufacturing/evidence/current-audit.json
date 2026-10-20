@@ -1,0 +1,801 @@
+{
+  "schema_version": 1,
+  "readiness": "NOT_FOR_MANUFACTURE",
+  "limitations": [
+    "No native ERC/DRC or unrouted-net calculation",
+    "No netlist connectivity comparison or RF/impedance simulation",
+    "CPL origin, rotation, component fit and DNP intent need native review",
+    "Gerbers are existing unverified exports; no CAM equivalence proven"
+  ],
+  "boards": {
+    "main": {
+      "inputs": {
+        "4_Schematics and Boards Layout/4_6_Schematics/MainBoard/RADAR_Main_Board.sch": "05d5dfa2863c011d406f311b0c5c5846bc4d775b1a399dcc8452fa7dfe1b77c8",
+        "4_Schematics and Boards Layout/4_6_Schematics/MainBoard/RADAR_Main_Board.brd": "5515c7483bb719b478464466eb8cd8a018b1277410a539d3e61948e8a7a9108a",
+        "4_Schematics and Boards Layout/4_7_Production Files/Gerber_Main_Board/BOM_Main_Board.xlsx": "01fe7d4f3a76848ecdaadf08e09c30b222dd403e9d305fa5f450cb7ac16b8660",
+        "4_Schematics and Boards Layout/4_7_Production Files/Gerber_Main_Board/CPL.xlsx": "0f7981443f38548670e8e217e54453660d1e481fbbbcf48f8f718e5303d92036"
+      },
+      "eagle_file_version": "7.4.0",
+      "board_elements": 791,
+      "schematic_physical_parts": 791,
+      "bom_rows": 103,
+      "cpl_rows": 709,
+      "layer_setup": "(1*2+3*4+5*12+13*14+15*16)",
+      "copper_layers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "copper_layer_count": 10,
+      "via_drills_mm": {
+        "0.15": 1604,
+        "0.2": 2243,
+        "0.3": 357,
+        "0.35": 113,
+        "0.5": 21,
+        "0.6": 7,
+        "1": 4,
+        "1.2": 4
+      },
+      "minimum_via_drill_mm": 0.15,
+      "stored_layer19_wires": 0,
+      "findings": [],
+      "assembly_disposition_required": [
+        {
+          "ref": "J19",
+          "package": "CJTTPHHSTTH1",
+          "smd_pads": 0,
+          "through_hole_pads": 6
+        },
+        {
+          "ref": "J21",
+          "package": "CJTTPHHSTTH1",
+          "smd_pads": 0,
+          "through_hole_pads": 6
+        },
+        {
+          "ref": "JP1",
+          "package": "2X06",
+          "smd_pads": 0,
+          "through_hole_pads": 12
+        },
+        {
+          "ref": "JP13",
+          "package": "2X07",
+          "smd_pads": 0,
+          "through_hole_pads": 14
+        },
+        {
+          "ref": "X1",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X10",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X11",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X12",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X13",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X14",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X15",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X16",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X17",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X18",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X19",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X20",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X21",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X22",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X24",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X3",
+          "package": "22-23-2031",
+          "smd_pads": 0,
+          "through_hole_pads": 3
+        },
+        {
+          "ref": "X38",
+          "package": "22-23-2031",
+          "smd_pads": 0,
+          "through_hole_pads": 3
+        },
+        {
+          "ref": "X39",
+          "package": "22-23-2031",
+          "smd_pads": 0,
+          "through_hole_pads": 3
+        },
+        {
+          "ref": "X4",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X40",
+          "package": "22-23-2031",
+          "smd_pads": 0,
+          "through_hole_pads": 3
+        },
+        {
+          "ref": "X41",
+          "package": "22-23-2031",
+          "smd_pads": 0,
+          "through_hole_pads": 3
+        },
+        {
+          "ref": "X42",
+          "package": "22-23-2031",
+          "smd_pads": 0,
+          "through_hole_pads": 3
+        },
+        {
+          "ref": "X43",
+          "package": "22-23-2031",
+          "smd_pads": 0,
+          "through_hole_pads": 3
+        },
+        {
+          "ref": "X44",
+          "package": "22-23-2031",
+          "smd_pads": 0,
+          "through_hole_pads": 3
+        },
+        {
+          "ref": "X45",
+          "package": "22-23-2031",
+          "smd_pads": 0,
+          "through_hole_pads": 3
+        },
+        {
+          "ref": "X46",
+          "package": "22-23-2031",
+          "smd_pads": 0,
+          "through_hole_pads": 3
+        },
+        {
+          "ref": "X47",
+          "package": "22-23-2031",
+          "smd_pads": 0,
+          "through_hole_pads": 3
+        },
+        {
+          "ref": "X48",
+          "package": "22-23-2031",
+          "smd_pads": 0,
+          "through_hole_pads": 3
+        },
+        {
+          "ref": "X49",
+          "package": "22-23-2031",
+          "smd_pads": 0,
+          "through_hole_pads": 3
+        },
+        {
+          "ref": "X5",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X50",
+          "package": "22-23-2031",
+          "smd_pads": 0,
+          "through_hole_pads": 3
+        },
+        {
+          "ref": "X51",
+          "package": "22-23-2031",
+          "smd_pads": 0,
+          "through_hole_pads": 3
+        },
+        {
+          "ref": "X52",
+          "package": "22-23-2031",
+          "smd_pads": 0,
+          "through_hole_pads": 3
+        },
+        {
+          "ref": "X54",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X55",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X56",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X6",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X7",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X8",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X9",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X_1",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X_10",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X_11",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X_12",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X_13",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X_14",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X_15",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X_16",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X_2",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X_3",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X_4",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X_5",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X_6",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X_7",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X_8",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X_9",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        }
+      ]
+    },
+    "synth": {
+      "inputs": {
+        "4_Schematics and Boards Layout/4_6_Schematics/FrequencySynthesizerBoard/Clocks_Freq_Synth_board.sch": "6e4e52f35e1c3c40bb0f0430996482d173112e7a2d9f4d6bcd3578654e859cee",
+        "4_Schematics and Boards Layout/4_6_Schematics/FrequencySynthesizerBoard/Clocks_Freq_Synth_board.brd": "136eaedc18ee87fe3ec39602290f62514e778b6b5c42938ed0b3f362d2f5ac08",
+        "4_Schematics and Boards Layout/4_7_Production Files/Gerber_freq_synth/BOM_Freq_Synth.xlsx": "b0f13e9bee22d4df62448801cd43f45db9ae8b0db29a4efca90c66828616ba55",
+        "4_Schematics and Boards Layout/4_7_Production Files/Gerber_freq_synth/CPL.xlsx": "982639c6259c8e50e492ecb76ffaeb1f985fa7bf35ea602eae767b76a7c1a811"
+      },
+      "eagle_file_version": "9.6.2",
+      "board_elements": 184,
+      "schematic_physical_parts": 184,
+      "bom_rows": 39,
+      "cpl_rows": 174,
+      "layer_setup": "(1+2*3+14*15+16)",
+      "copper_layers": [
+        1,
+        2,
+        3,
+        14,
+        15,
+        16
+      ],
+      "copper_layer_count": 6,
+      "via_drills_mm": {
+        "0.15": 212,
+        "0.2": 101,
+        "0.3": 391,
+        "0.5": 32,
+        "1": 32,
+        "2": 1
+      },
+      "minimum_via_drill_mm": 0.15,
+      "stored_layer19_wires": 0,
+      "findings": [],
+      "assembly_disposition_required": [
+        {
+          "ref": "J3",
+          "package": "CONN_CJT-T-P-XX-ST-TH1_SAI",
+          "smd_pads": 0,
+          "through_hole_pads": 6
+        },
+        {
+          "ref": "J4",
+          "package": "CONN_CJT-T-P-XX-ST-TH1_SAI",
+          "smd_pads": 0,
+          "through_hole_pads": 6
+        },
+        {
+          "ref": "JP1",
+          "package": "2X06",
+          "smd_pads": 0,
+          "through_hole_pads": 12
+        },
+        {
+          "ref": "JP2",
+          "package": "2X07",
+          "smd_pads": 0,
+          "through_hole_pads": 14
+        },
+        {
+          "ref": "X10",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X11",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X12",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X13",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X14",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X15",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        }
+      ]
+    },
+    "power": {
+      "inputs": {
+        "4_Schematics and Boards Layout/4_6_Schematics/PowerBoard/PowerBoard.sch": "7c4840c6620098c098c54ef82d7137896e3d17a06ad3f4f9ecd63a7eb6eb449a",
+        "4_Schematics and Boards Layout/4_6_Schematics/PowerBoard/PowerBoard.brd": "8ebf4ced1007120c93b887578f6bddd2ff30110920b8efc5e0e6f6608ec78d97",
+        "4_Schematics and Boards Layout/4_7_Production Files/Gerber_PowerBoard/BOM_Power_Board.xlsx": "fa0658a7c9279660ca04a43c2e6edb3a79423d89b794b691e42723f610623d66",
+        "4_Schematics and Boards Layout/4_7_Production Files/Gerber_PowerBoard/CPL.xlsx": "d2f12050116fe2567de06ae8802f16b59d00070309003a727bc6c06f31ba0edf"
+      },
+      "eagle_file_version": "7.4.0",
+      "board_elements": 313,
+      "schematic_physical_parts": 312,
+      "bom_rows": 28,
+      "cpl_rows": 276,
+      "layer_setup": "(1*16)",
+      "copper_layers": [
+        1,
+        16
+      ],
+      "copper_layer_count": 2,
+      "via_drills_mm": {
+        "0.15": 28,
+        "0.2": 9,
+        "0.3": 6,
+        "0.35": 79,
+        "0.6": 838
+      },
+      "minimum_via_drill_mm": 0.15,
+      "stored_layer19_wires": 0,
+      "findings": [
+        {
+          "code": "CAD_BOARD_ONLY",
+          "detail": [
+            "X36"
+          ]
+        }
+      ],
+      "assembly_disposition_required": [
+        {
+          "ref": "SV1",
+          "package": "MA10-2",
+          "smd_pads": 0,
+          "through_hole_pads": 20
+        },
+        {
+          "ref": "X1",
+          "package": "AK300/2",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X10",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X11",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X12",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X13",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X14",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X15",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X16",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X17",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X18",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X19",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X2",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X20",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X21",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X22",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X23",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X24",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X25",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X26",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X27",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X28",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X29",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X3",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X30",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X31",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X32",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X33",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X34",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X35",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X36",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X4",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X5",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X6",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X7",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X8",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        },
+        {
+          "ref": "X9",
+          "package": "22-23-2021",
+          "smd_pads": 0,
+          "through_hole_pads": 2
+        }
+      ]
+    },
+    "patch": {
+      "inputs": {
+        "4_Schematics and Boards Layout/4_6_Schematics/Antennas/Patch/8x16/Patch_Anetnna_16_8.sch": "c0e18e696e838f73e447065faabcb90f9193c79d3c02060893300edeb418204d",
+        "4_Schematics and Boards Layout/4_6_Schematics/Antennas/Patch/8x16/Patch_Anetnna_16_8.brd": "fda43223fe70de5b4fdaae8e6ea79b190ac373e4e30497d17b3b76003637b51b",
+        "4_Schematics and Boards Layout/4_7_Production Files/Gerber_Patch_Antenna/BOM_Patch_Antenna.xlsx": "d3f04efa7fcd74ffa0292f34b40a5f4e05efefddd0be55e77ce9c29cec0930b3",
+        "4_Schematics and Boards Layout/4_7_Production Files/Gerber_Patch_Antenna/CPL.xlsx": "8224555f1404a73ec0a8f0a4de006cb7d55ca33bee5415e22bb656433995c1f2"
+      },
+      "eagle_file_version": "7.4.0",
+      "board_elements": 16,
+      "schematic_physical_parts": 16,
+      "bom_rows": 1,
+      "cpl_rows": 16,
+      "layer_setup": "(1+2*3+16)",
+      "copper_layers": [
+        1,
+        2,
+        3,
+        16
+      ],
+      "copper_layer_count": 4,
+      "via_drills_mm": {
+        "0.6": 95
+      },
+      "minimum_via_drill_mm": 0.6,
+      "stored_layer19_wires": 0,
+      "findings": [],
+      "assembly_disposition_required": []
+    }
+  },
+  "source_commit": "749bd0f86a07a28a86347d8ce9c141e601057c40",
+  "static_finding_count": 1,
+  "static_status": "FINDINGS"
+}

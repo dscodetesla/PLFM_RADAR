@@ -1,0 +1,8 @@
+{
+  "power_change": "Add only X36 part and second sheet; preserve existing parsed XML",
+  "existing_schematic_tree_unchanged": true,
+  "board_changed": false,
+  "before_sha256": "7c4840c6620098c098c54ef82d7137896e3d17a06ad3f4f9ecd63a7eb6eb449a",
+  "after_sha256": "45f4e57a85bc2e63e35f22b62cdc811487f943503c29014d7e854f8a42b0f6ed",
+  "native_validation": "NOT_RUN"
+}

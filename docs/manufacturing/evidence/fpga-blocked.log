@@ -1,0 +1,10 @@
+============================================
+  AERIS-10 FPGA Regression Test Suite
+============================================
+
+Date: Mon Oct 19 22:35:36 BST 2026
+iverilog: run_regression.sh: line 324: iverilog: command not found
+
+--- PHASE 0: LINT (Vivado-class checks) ---
+  iverilog -Wall (production)                   [0;31mCOMPILE ERROR[0m
+    run_regression.sh: line 126: iverilog: command not found
