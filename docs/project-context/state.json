@@ -2,7 +2,7 @@
   "schema_version": 1,
   "configuration": "AERIS-10N Nexus four-board recovery",
   "source_commit": "749bd0f86a07a28a86347d8ce9c141e601057c40",
-  "working_branch": "integration/workbench-2026-10-20",
+  "working_branch": "checkpoint/rnd-2026-10-24",
   "readiness": "NOT_FOR_MANUFACTURE",
   "remote_changes": true,
   "completed": [
@@ -12,7 +12,8 @@
     "HF manufacturer GAP report",
     "Power X36 schematic recovery with unchanged PCB",
     "All four boards saved pad/net parity",
-    "Five-clock XDC/PCB check and 50T fail-fast preflight"
+    "Five-clock XDC/PCB check and 50T fail-fast preflight",
+    "Native 50T target and package-pin inventory on desk-tyan Vivado 2026.1"
   ],
   "open": [
     "Native ERC/DRC review of recovered Power X36",
@@ -20,8 +21,20 @@
     "XTAL3 fit/load review",
     "native ERC/DRC and FPGA build",
     "per-board stackup approval",
-    "complete local CI"
+    "complete local CI",
+    "Review and full local CI of pending production gate hardening",
+    "Timing coverage/unconstrained paths and CDC acceptance remain separate native gates"
   ],
-  "next_action": "Review native MainBoard clock ECO candidates C13→D13 and C4→D4; close Bank14 electrical constraints, native PowerBoard ERC/DRC and XTAL3 fit/load; run full approved local CI before production review.",
-  "evidence": "docs/manufacturing/EMPIRICAL_UNBLOCK.md"
+  "next_action": "Continue R&D clock and Bank14 investigations from this checkpoint; complete review and full CI before development merge or hardware use.",
+  "evidence": "docs/manufacturing/ITERATION3_PRODUCTION_GATE.md",
+  "iteration_base_commit": "b00c6b5e9a2b6a08130bfa1ded342fe60a9f78e2",
+  "pending_changes": null,
+  "checkpoint": {
+    "date": "2026-10-24",
+    "kind": "R&D archival snapshot",
+    "base_commit": "b00c6b5e9a2b6a08130bfa1ded342fe60a9f78e2",
+    "full_ci": "NOT_COMPLETE",
+    "authorization": "User explicitly requested a separate branch saving the current repository and all changes",
+    "scope": "Complete current integration tree plus all seven pending source/document changes; separate host copies inventoried independently"
+  }
 }
