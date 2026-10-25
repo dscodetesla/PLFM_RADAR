@@ -6,6 +6,8 @@
 
 # AERIS-10: Open Source Pulse Linear Frequency Modulated Phased Array Radar
 
+Cloud development and existing MCP integration: [bounded pilot workflow](docs/cloud-mcp-pilot.md).
+
 [![Hardware: CERN-OHL-P](https://img.shields.io/badge/Hardware-CERN--OHL--P-blue.svg)](https://ohwr.org/cern_ohl_p_v2.txt)
 [![Software: MIT](https://img.shields.io/badge/Software-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Status: Alpha](https://img.shields.io/badge/Status-Alpha-orange)](https://github.com/NawfalMotii79/PLFM_RADAR)

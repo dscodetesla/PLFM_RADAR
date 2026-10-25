@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "route": "agent_tool_mcp",
+  "agent_routes": [
+    {
+      "host": "live",
+      "tools": {
+        "cad_environment_status": "mcp__codex_apps__cad_cae_live_cad_environment_status",
+        "cad_list_artifacts": "mcp__codex_apps__cad_cae_live_cad_list_artifacts",
+        "scilab_batch_smoke_test": "mcp__codex_apps__cad_cae_live_scilab_batch_smoke_test"
+      }
+    },
+    {
+      "host": "x99mg",
+      "tools": {
+        "cad_environment_status": "mcp__codex_apps__cad_cae_x99mg_cad_environment_status",
+        "cad_list_artifacts": "mcp__codex_apps__cad_cae_x99mg_cad_list_artifacts",
+        "scilab_batch_smoke_test": "mcp__codex_apps__cad_cae_x99mg_scilab_batch_smoke_test"
+      }
+    },
+    {
+      "host": "dell_t3500",
+      "tools": {
+        "cad_environment_status": "mcp__codex_apps__cad_cae_dell_t3500_cad_environment_status",
+        "cad_list_artifacts": "mcp__codex_apps__cad_cae_dell_t3500_cad_list_artifacts",
+        "scilab_batch_smoke_test": "mcp__codex_apps__cad_cae_dell_t3500_scilab_batch_smoke_test"
+      }
+    }
+  ],
+  "arguments": {},
+  "limits": {
+    "timeout_seconds": 30,
+    "max_output_bytes": 1048576,
+    "max_parallel_jobs": 1,
+    "cpu_limit": 1,
+    "memory_mib": 512
+  },
+  "limits_enforced_on_host": false,
+  "automatic_dispatch": false,
+  "automatic_retries": 0,
+  "heavy_builds_enabled": false,
+  "direct_client": {
+    "enabled": false,
+    "endpoint": null
+  },
+  "host_deployment": "NOT_RUN",
+  "artifact_transport": "BLOCKED",
+  "eda_discovery": "BLOCKED",
+  "vitis_acceptance": "NOT_RUN"
+}
