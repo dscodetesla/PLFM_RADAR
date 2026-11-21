@@ -2,14 +2,17 @@ name: AERIS-10 CI
 
 on:
   pull_request:
-    branches: [main, develop]
+    branches: [main, develop, "checkpoint/**"]
   push:
-    branches: [main, develop]
+    branches: [main, develop, "work/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   # ===========================================================================
   # Python: lint (ruff), syntax check (py_compile), unit tests (pytest)
-  # CI structure proposed by hcm444 — uses uv for dependency management
   # ===========================================================================
   python-tests:
     name: Python Lint + Tests
@@ -43,16 +46,16 @@ jobs:
               py_compile.compile(str(p), doraise=True)
           PY
 
-      - name: Unit tests
+      - name: Unit tests (GUI + Manufacturing & FPGA XDC gates)
         run: >
           uv run pytest
           9_Firmware/9_3_GUI/test_GUI_V65_Tk.py
           9_Firmware/9_3_GUI/test_v7.py
+          tools/manufacturing/tests
           -v --tb=short
 
   # ===========================================================================
-  # MCU Firmware Unit Tests (20 tests)
-  # Bug regression (15) + Gap-3 safety tests (5)
+  # MCU Firmware Unit Tests (25 C/C++ suites under -Wall -Wextra -Werror)
   # ===========================================================================
   mcu-tests:
     name: MCU Firmware Tests
@@ -86,9 +89,7 @@ jobs:
         working-directory: 9_Firmware/9_2_FPGA
 
   # ===========================================================================
-  # Cross-Layer Contract Tests (Python ↔ Verilog ↔ C)
-  # Validates opcode maps, bit widths, packet layouts, and round-trip
-  # correctness across FPGA RTL, Python GUI, and STM32 firmware.
+  # Cross-Layer Contract Tests (Python <-> Verilog <-> C)
   # ===========================================================================
   cross-layer-tests:
     name: Cross-Layer Contract Tests

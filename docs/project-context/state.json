@@ -1,40 +1,183 @@
 {
-  "schema_version": 1,
-  "configuration": "AERIS-10N Nexus four-board recovery",
-  "source_commit": "749bd0f86a07a28a86347d8ce9c141e601057c40",
-  "working_branch": "checkpoint/rnd-2026-10-24",
-  "readiness": "NOT_FOR_MANUFACTURE",
-  "remote_changes": true,
-  "completed": [
-    "BOM cardinality repairs",
-    "DNP CPL cleanup",
-    "deterministic audit and regression tests",
-    "HF manufacturer GAP report",
-    "Power X36 schematic recovery with unchanged PCB",
-    "All four boards saved pad/net parity",
-    "Five-clock XDC/PCB check and 50T fail-fast preflight",
-    "Native 50T target and package-pin inventory on desk-tyan Vivado 2026.1"
+  "schema_version": "1.3.0",
+  "project": "PLFM_RADAR",
+  "variant": "AERIS-10N Nexus R0.1",
+  "canonical_repository": "https://github.com/dscodetesla/PLFM_RADAR.git",
+  "active_branch": "work/r02-integrated-2026-11-21",
+  "checkpoint_branch": "checkpoint/rnd-2026-10-24",
+  "checkpoint_commit": "a4840b40",
+  "checkpoint_commit_full": "a4840b40f7d517669fc556e179da79f4877ced2f",
+  "upstream_repository": "https://github.com/NawfalMotii79/PLFM_RADAR",
+  "upstream_base_commit": "749bd0f86a07a28a86347d8ce9c141e601057c40",
+  "upstream_latest_brd_commit": "62d4c556508927a4192acca24422bd16a979c7dc",
+  "host_verified": "desk-tyan",
+  "host_device_id": "739c694f-0965-4c21-82d3-4320f81b5ae0",
+  "isolated_worktree": "/home/user/projects/PLFM_RADAR-wt-r02-20261121",
+  "clean_baseline_tree": "/home/user/projects/PLFM_RADAR-rnd-20261024",
+  "vivado_path": "/home/user/AMDDesignTools/2026.1/Vivado/bin/vivado",
+  "fpga_part": "xc7a50tftg256-2",
+  "readiness": "Draft",
+  "manufacturing_status": "NOT_FOR_MANUFACTURE",
+  "firmware_flash_status": "NOT_FOR_FLASH",
+  "updated_at": "2026-11-21T11:10:00+02:00",
+  "terminology_guardrails": {
+    "unapproved_eco_revisions_forbidden": true,
+    "evidence_tags": {
+      "[V]": "Empirically verified from repository XML/HDL/C++/Python sources, SHA-256 hashes, and host CI/Vivado logs",
+      "[Proposal]": "Candidate PCB ECO option requiring physical BGA escape routing, ERC/DRC, and timing closure before approval",
+      "[?]": "Open hardware/CAM verification item blocking fabrication or flash release"
+    },
+    "eco_candidates": [
+      {
+        "signal": "FPGA_DAC_CLOCK",
+        "net": "clk_120m_dac",
+        "frequency_mhz": 120.0,
+        "current_sch_brd_pin": "C13",
+        "current_xdc_pin": "D13",
+        "tag": "[Proposal]",
+        "status": "ECO_CANDIDATE_UNDER_INVESTIGATION_9"
+      },
+      {
+        "signal": "FT_CLKOUT",
+        "net": "ft_clkout",
+        "frequency_mhz": 60.0,
+        "current_sch_brd_pin": "C4",
+        "candidate_pin": "D4",
+        "tag": "[Proposal]",
+        "status": "ECO_CANDIDATE_UNDER_INVESTIGATION_10"
+      }
+    ]
+  },
+  "r02_integrated_packages": {
+    "mcu_bist_phaselut": {
+      "github_commit": "c5780cfe0b1a144bcd58a058dc99cb25d71e251b",
+      "source_ref": "cb70cb34cc64973ba853ca1f1a87660614c26f2e",
+      "tag": "[V]",
+      "highlights": [
+        "ADAR1000 0x030 MISC_ENABLES Bit 5 BIAS_EN active-low fix (0 = enabled)",
+        "Schematic-verified SPI chip addresses ADDR1:ADDR0 = {0, 2, 1, 3}",
+        "1-based channel indexing (1..4 -> channel-1) preventing CH4->CH1 wrap",
+        "10.5 GHz RO4350B PCB trace phase compensation LUT (ADAR1000_PcbPhaseLut.h) & non-linear ADTR1107 quadrant map",
+        "Closed-loop 16-ch TX power equalization & PA Idq BIST (ADAR1000_BIST.{h,cpp}) over isolated I2C1/I2C2 buses",
+        "25/25 C/C++ host regression suites PASS under -Wall -Wextra -Werror"
+      ]
+    },
+    "cad_short_fix_and_patch_dfm": {
+      "github_commit": "d7121b609231e1f31e16bc66e8aa6dc9cde146e6",
+      "source_ref": "ba350989af872490d92f6578474fc80ae8964b52",
+      "tag": "[V]",
+      "highlights": [
+        "RADAR_Main_Board.brd synced to upstream 62d4c556 (EAGLE 7.6.0, SHA-256 ab4e3cb7...), resolving +5V0_0 <-> GND Layer-1 short at (54.620, 136.470) mm",
+        "Patch_Anetnna_16_8.brd, .mnt, and CPL.xlsx aligned by -0.0800 mm on J9, J11, J13, J15 to exact 14.3400 mm array grid with 64/64 GND pad SCH<->BRD parity"
+      ]
+    },
+    "fpga_xdc_tcl_and_clock_gate": {
+      "github_commit": "a5c19974a95c2e0810dcf00f7da591f9d271c9db",
+      "source_ref": "d73a441b74b9cd4582166d1ea4d8853f68ec45f3",
+      "tag": "[V]",
+      "highlights": [
+        "Bank 14 (VCCO=3.3V): DIFF_TERM FALSE on AD9484 LVDS_25 pairs (external 100R R2..R12) + LVCMOS33 on T5 adc_pwdn (R36=830R/R37=1k divider)",
+        "Clean P-side MRCC assignments in XDC (clk_120m_dac -> D13, ft_clkout -> D4) with zero CLOCK_DEDICATED_ROUTE FALSE waivers",
+        "Hierarchical u_core paths in xc7a50t_ftg256.xdc & adc_clk_mmcm.xdc plus FT2232H 3.500 ns max output delay",
+        "Zero-waiver build_50t.tcl + pre_bitstream_gate.tcl + production_gate.tcl pre-bitstream enforcement"
+      ]
+    }
+  },
+  "local_verification_metrics": {
+    "ruff_0_17_6_errors": 0,
+    "py_compile_files": 67,
+    "manufacturing_unittest_passed": "53/53",
+    "pytest_suite_passed": "269 passed, 3 skipped (26 subtests passed)",
+    "mcu_make_werror_suites_passed": "25/25",
+    "fpga_iverilog_12_regression_passed": "27/27"
+  },
+  "included_boards": [
+    {
+      "name": "MainBoard",
+      "copper_layers": 10,
+      "stackup": "1*2+3*4+5*12+13*14+15*16",
+      "brd_revision": "62d4c556508927a4192acca24422bd16a979c7dc",
+      "cad_elements": 791,
+      "fitted_cpl_items": 709,
+      "connected_pads": 3453,
+      "min_via_drill_mm": 0.15,
+      "via_count": 1604,
+      "layer1_short_5v0_gnd_resolved": true,
+      "gerber_stale": true
+    },
+    {
+      "name": "Frequency Synthesizer",
+      "copper_layers": 6,
+      "stackup": "1+2*3+14*15+16",
+      "cad_elements": 184,
+      "fitted_cpl_items": 174,
+      "connected_pads": 619,
+      "min_via_drill_mm": 0.15,
+      "via_count": 212,
+      "gerber_stale": false
+    },
+    {
+      "name": "PowerBoard",
+      "copper_layers": 2,
+      "stackup": "1*16",
+      "cad_elements": 313,
+      "fitted_cpl_items": 276,
+      "connected_pads": 814,
+      "min_via_drill_mm": 0.15,
+      "via_count": 28,
+      "x36_recovered_in_sch": true
+    },
+    {
+      "name": "Patch 8x16",
+      "copper_layers": 4,
+      "stackup": "1+2*3+16",
+      "sma_connectors": 16,
+      "pitch_mm": 14.34,
+      "j9_j15_dfm_aligned": true,
+      "connected_pads": 64,
+      "min_drill_mm": 0.6,
+      "gerber_stale": true
+    }
   ],
-  "open": [
-    "Native ERC/DRC review of recovered Power X36",
-    "DAC clock C13/D13 mismatch",
-    "XTAL3 fit/load review",
-    "native ERC/DRC and FPGA build",
-    "per-board stackup approval",
-    "complete local CI",
-    "Review and full local CI of pending production gate hardening",
-    "Timing coverage/unconstrained paths and CDC acceptance remain separate native gates"
+  "excluded_hardware": [
+    "PA/QPA Boards (QPA2962)",
+    "Waveguide 32x16 Slotted Array (DFSWA.dwg)"
   ],
-  "next_action": "Continue R&D clock and Bank14 investigations from this checkpoint; complete review and full CI before development merge or hardware use.",
-  "evidence": "docs/manufacturing/ITERATION3_PRODUCTION_GATE.md",
-  "iteration_base_commit": "b00c6b5e9a2b6a08130bfa1ded342fe60a9f78e2",
-  "pending_changes": null,
-  "checkpoint": {
-    "date": "2026-10-24",
-    "kind": "R&D archival snapshot",
-    "base_commit": "b00c6b5e9a2b6a08130bfa1ded342fe60a9f78e2",
-    "full_ci": "NOT_COMPLETE",
-    "authorization": "User explicitly requested a separate branch saving the current repository and all changes",
-    "scope": "Complete current integration tree plus all seven pending source/document changes; separate host copies inventoried independently"
+  "completed_iterations": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "open_investigations": {
+    "first_wave": [
+      9,
+      10,
+      11
+    ],
+    "dependent_on_first_wave": [
+      12
+    ],
+    "independent_parallel": [
+      13,
+      14
+    ]
+  },
+  "gates": {
+    "G01_variant_scope_locked": "PASS",
+    "G02_bom_cpl_cardinality": "PASS",
+    "G03_cad_xml_short_and_patch_parity": "PASS",
+    "G04_python_test_and_ruff_suite": "PASS",
+    "G05_mcu_cpputest_host_suites": "PASS",
+    "G06_fresh_cam_gerber_export": "BLOCKED_STALE_GERBERS",
+    "G07_production_gate_zero_waivers_script": "PASS",
+    "G08_mainboard_gerber_freshness": "BLOCKED_REQUIRES_NATIVE_CAM",
+    "G09_fpga_clock_pins_c13_d13_c4_d4": "BLOCKED_INVESTIGATION_9_10",
+    "G10_fpga_bank14_bivc1_plio9": "BLOCKED_INVESTIGATION_11",
+    "G11_full_vivado_2026_1_bitstream": "BLOCKED_INVESTIGATION_12"
   }
 }
