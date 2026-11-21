@@ -557,13 +557,13 @@ Your Eurocircuits Team
 <attribute name="MOUSER_PART_NUMBER" value="530-142-0731-211" x="115.38" y="18" size="1.778" layer="27" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Johnson-Cinch-Connectivity-Solutions/142-0731-211?qs=HFfMDpzxxd0OVzI3hm9tuA%3D%3D" x="115.38" y="18" size="1.778" layer="27" display="off"/>
 </element>
-<element name="J9" library="142-0731-211" package="1420731211" value="142-0731-211" x="172.82" y="18">
-<attribute name="MANUFACTURER_NAME" value="Cinch Connectivity Solutions" x="157.82" y="8" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="142-0731-211" x="157.82" y="8" size="1.778" layer="27" display="off"/>
-<attribute name="DESCRIPTION" value="SMA Connector Jack, Female Socket 50 Ohms Through Hole Solder" x="157.82" y="8" size="1.778" layer="27" display="off"/>
-<attribute name="HEIGHT" value="9.8852mm" x="157.82" y="8" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="530-142-0731-211" x="157.82" y="8" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Johnson-Cinch-Connectivity-Solutions/142-0731-211?qs=HFfMDpzxxd0OVzI3hm9tuA%3D%3D" x="157.82" y="8" size="1.778" layer="27" display="off"/>
+<element name="J9" library="142-0731-211" package="1420731211" value="142-0731-211" x="172.74" y="18">
+<attribute name="MANUFACTURER_NAME" value="Cinch Connectivity Solutions" x="157.74" y="8" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="142-0731-211" x="157.74" y="8" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value="SMA Connector Jack, Female Socket 50 Ohms Through Hole Solder" x="157.74" y="8" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="9.8852mm" x="157.74" y="8" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="530-142-0731-211" x="157.74" y="8" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Johnson-Cinch-Connectivity-Solutions/142-0731-211?qs=HFfMDpzxxd0OVzI3hm9tuA%3D%3D" x="157.74" y="8" size="1.778" layer="27" display="off"/>
 </element>
 <element name="J10" library="142-0731-211" package="1420731211" value="142-0731-211" x="129.72" y="18">
 <attribute name="MANUFACTURER_NAME" value="Cinch Connectivity Solutions" x="129.72" y="8" size="1.778" layer="27" display="off"/>
@@ -573,13 +573,13 @@ Your Eurocircuits Team
 <attribute name="MOUSER_PART_NUMBER" value="530-142-0731-211" x="129.72" y="8" size="1.778" layer="27" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Johnson-Cinch-Connectivity-Solutions/142-0731-211?qs=HFfMDpzxxd0OVzI3hm9tuA%3D%3D" x="129.72" y="8" size="1.778" layer="27" display="off"/>
 </element>
-<element name="J11" library="142-0731-211" package="1420731211" value="142-0731-211" x="187.16" y="18">
-<attribute name="MANUFACTURER_NAME" value="Cinch Connectivity Solutions" x="172.16" y="-2" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="142-0731-211" x="172.16" y="-2" size="1.778" layer="27" display="off"/>
-<attribute name="DESCRIPTION" value="SMA Connector Jack, Female Socket 50 Ohms Through Hole Solder" x="172.16" y="-2" size="1.778" layer="27" display="off"/>
-<attribute name="HEIGHT" value="9.8852mm" x="172.16" y="-2" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="530-142-0731-211" x="172.16" y="-2" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Johnson-Cinch-Connectivity-Solutions/142-0731-211?qs=HFfMDpzxxd0OVzI3hm9tuA%3D%3D" x="172.16" y="-2" size="1.778" layer="27" display="off"/>
+<element name="J11" library="142-0731-211" package="1420731211" value="142-0731-211" x="187.08" y="18">
+<attribute name="MANUFACTURER_NAME" value="Cinch Connectivity Solutions" x="172.08" y="-2" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="142-0731-211" x="172.08" y="-2" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value="SMA Connector Jack, Female Socket 50 Ohms Through Hole Solder" x="172.08" y="-2" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="9.8852mm" x="172.08" y="-2" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="530-142-0731-211" x="172.08" y="-2" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Johnson-Cinch-Connectivity-Solutions/142-0731-211?qs=HFfMDpzxxd0OVzI3hm9tuA%3D%3D" x="172.08" y="-2" size="1.778" layer="27" display="off"/>
 </element>
 <element name="J12" library="142-0731-211" package="1420731211" value="142-0731-211" x="144.06" y="18">
 <attribute name="MANUFACTURER_NAME" value="Cinch Connectivity Solutions" x="144.06" y="-2" size="1.778" layer="27" display="off"/>
@@ -589,13 +589,13 @@ Your Eurocircuits Team
 <attribute name="MOUSER_PART_NUMBER" value="530-142-0731-211" x="144.06" y="-2" size="1.778" layer="27" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Johnson-Cinch-Connectivity-Solutions/142-0731-211?qs=HFfMDpzxxd0OVzI3hm9tuA%3D%3D" x="144.06" y="-2" size="1.778" layer="27" display="off"/>
 </element>
-<element name="J13" library="142-0731-211" package="1420731211" value="142-0731-211" x="201.5" y="18">
-<attribute name="MANUFACTURER_NAME" value="Cinch Connectivity Solutions" x="186.5" y="-12" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="142-0731-211" x="186.5" y="-12" size="1.778" layer="27" display="off"/>
-<attribute name="DESCRIPTION" value="SMA Connector Jack, Female Socket 50 Ohms Through Hole Solder" x="186.5" y="-12" size="1.778" layer="27" display="off"/>
-<attribute name="HEIGHT" value="9.8852mm" x="186.5" y="-12" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="530-142-0731-211" x="186.5" y="-12" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Johnson-Cinch-Connectivity-Solutions/142-0731-211?qs=HFfMDpzxxd0OVzI3hm9tuA%3D%3D" x="186.5" y="-12" size="1.778" layer="27" display="off"/>
+<element name="J13" library="142-0731-211" package="1420731211" value="142-0731-211" x="201.42" y="18">
+<attribute name="MANUFACTURER_NAME" value="Cinch Connectivity Solutions" x="186.42" y="-12" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="142-0731-211" x="186.42" y="-12" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value="SMA Connector Jack, Female Socket 50 Ohms Through Hole Solder" x="186.42" y="-12" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="9.8852mm" x="186.42" y="-12" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="530-142-0731-211" x="186.42" y="-12" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Johnson-Cinch-Connectivity-Solutions/142-0731-211?qs=HFfMDpzxxd0OVzI3hm9tuA%3D%3D" x="186.42" y="-12" size="1.778" layer="27" display="off"/>
 </element>
 <element name="J14" library="142-0731-211" package="1420731211" value="142-0731-211" x="158.4" y="18">
 <attribute name="MANUFACTURER_NAME" value="Cinch Connectivity Solutions" x="158.4" y="-12" size="1.778" layer="27" display="off"/>
@@ -605,13 +605,13 @@ Your Eurocircuits Team
 <attribute name="MOUSER_PART_NUMBER" value="530-142-0731-211" x="158.4" y="-12" size="1.778" layer="27" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Johnson-Cinch-Connectivity-Solutions/142-0731-211?qs=HFfMDpzxxd0OVzI3hm9tuA%3D%3D" x="158.4" y="-12" size="1.778" layer="27" display="off"/>
 </element>
-<element name="J15" library="142-0731-211" package="1420731211" value="142-0731-211" x="215.84" y="18">
-<attribute name="MANUFACTURER_NAME" value="Cinch Connectivity Solutions" x="200.84" y="-22" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="142-0731-211" x="200.84" y="-22" size="1.778" layer="27" display="off"/>
-<attribute name="DESCRIPTION" value="SMA Connector Jack, Female Socket 50 Ohms Through Hole Solder" x="200.84" y="-22" size="1.778" layer="27" display="off"/>
-<attribute name="HEIGHT" value="9.8852mm" x="200.84" y="-22" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="530-142-0731-211" x="200.84" y="-22" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Johnson-Cinch-Connectivity-Solutions/142-0731-211?qs=HFfMDpzxxd0OVzI3hm9tuA%3D%3D" x="200.84" y="-22" size="1.778" layer="27" display="off"/>
+<element name="J15" library="142-0731-211" package="1420731211" value="142-0731-211" x="215.76" y="18">
+<attribute name="MANUFACTURER_NAME" value="Cinch Connectivity Solutions" x="200.76" y="-22" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="142-0731-211" x="200.76" y="-22" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value="SMA Connector Jack, Female Socket 50 Ohms Through Hole Solder" x="200.76" y="-22" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="9.8852mm" x="200.76" y="-22" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="530-142-0731-211" x="200.76" y="-22" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Johnson-Cinch-Connectivity-Solutions/142-0731-211?qs=HFfMDpzxxd0OVzI3hm9tuA%3D%3D" x="200.76" y="-22" size="1.778" layer="27" display="off"/>
 </element>
 </elements>
 <signals>
