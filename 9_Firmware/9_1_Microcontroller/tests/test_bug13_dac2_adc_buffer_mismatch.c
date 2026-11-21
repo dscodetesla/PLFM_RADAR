@@ -70,6 +70,7 @@ int main(void)
         bug_adc2[channel] = 99;  /* stale value in adc2 */
 
         bug_adc1[channel] = measured_value;  /* BUG: wrote to wrong buffer */
+        assert(bug_adc1[channel] == measured_value);
         double bug_Idq = (3.3/255.0) * bug_adc2[channel] / (50.0 * 0.005);
 
         /* Bug would use stale value 99 instead of measured 200 */

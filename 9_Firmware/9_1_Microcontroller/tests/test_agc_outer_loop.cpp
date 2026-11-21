@@ -344,6 +344,67 @@ static void test_effective_gain_edge_cases()
 }
 
 // ---------------------------------------------------------------------------
+// Test 14: PR #154 -- Attack path never increases gain when agc_base_gain < min_gain
+// ---------------------------------------------------------------------------
+static void test_attack_never_increases_gain_below_min()
+{
+    ADAR1000_AGC agc;
+    agc.enabled = true;
+    agc.agc_base_gain = 20;
+    agc.min_gain = 45;
+    agc.gain_step_down = 4;
+
+    agc.update(true);  // saturation while below min_gain must NEVER jump up to 45!
+    assert(agc.agc_base_gain == 20);
+    assert(agc.saturation_event_count == 1);
+}
+
+// ---------------------------------------------------------------------------
+// Test 15: Issue #147 -- Saturating uint8_t overflow guards & 1-based CH1..CH4 writes
+// ---------------------------------------------------------------------------
+static void test_uint8_overflow_guards_and_ch4_mapping()
+{
+    ADAR1000_AGC agc;
+    agc.enabled = true;
+
+    // Case A: min_gain + gain_step_down > 255 (250 + 20 = 270) with agc_base_gain = 255
+    agc.min_gain = 250;
+    agc.max_gain = 255;
+    agc.gain_step_down = 20;
+    agc.agc_base_gain = 255;
+    agc.update(true);
+    assert(agc.agc_base_gain == 250);
+
+    // Case B: agc_base_gain + gain_step_up > 255 (250 + 20 = 270) with max_gain = 255
+    agc.gain_step_up = 20;
+    agc.holdoff_frames = 1;
+    agc.update(false);
+    assert(agc.agc_base_gain == 255);
+
+    // Case C: Verify applyGain() writes distinct CH1..CH4 RX gain registers (0x010..0x013)
+    spy_reset();
+    mock_adar_sim_enable(true);
+    ADAR1000Manager mgr;
+    ADAR1000_AGC agc_map;
+    agc_map.min_gain = 0;
+    agc_map.max_gain = 127;
+    agc_map.agc_base_gain = 40;
+    for (int i = 0; i < 16; ++i) {
+        agc_map.cal_offset[i] = static_cast<int8_t>(i); // unique gain 40..55 per channel!
+    }
+    agc_map.applyGain(mgr);
+
+    for (uint8_t dev = 0; dev < 4U; ++dev) {
+        for (uint8_t ch = 0; ch < 4U; ++ch) {
+            uint8_t expected = static_cast<uint8_t>(40U + dev * 4U + ch);
+            uint8_t actual = mock_adar_sim_get_reg(dev, static_cast<uint16_t>(REG_CH1_RX_GAIN + ch));
+            assert(actual == expected);
+        }
+    }
+    mock_adar_sim_enable(false);
+}
+
+// ---------------------------------------------------------------------------
 // main
 // ---------------------------------------------------------------------------
 int main()
@@ -363,6 +424,8 @@ int main()
     RUN_TEST(test_saturation_counter);
     RUN_TEST(test_mixed_sequence);
     RUN_TEST(test_effective_gain_edge_cases);
+    RUN_TEST(test_attack_never_increases_gain_below_min);
+    RUN_TEST(test_uint8_overflow_guards_and_ch4_mapping);
 
     printf("=== Results: %d/%d passed ===\n", tests_passed, tests_total);
     return (tests_passed == tests_total) ? 0 : 1;

@@ -17,15 +17,15 @@
 
 CC       := cc
 CXX      := c++
-CFLAGS   := -std=c11 -Wall -Wextra -Wno-unused-parameter -g -O0
-CXXFLAGS := -std=c++17 -Wall -Wextra -Wno-unused-parameter -g -O0
+CFLAGS   := -std=c11 -Wall -Wextra -Werror -Wno-unused-parameter -g -O0
+CXXFLAGS := -std=c++17 -Wall -Wextra -Werror -Wsign-compare -DDIAG_DISABLE -g -O0
 # Shim headers come FIRST so they override real headers
 INCLUDES := -Ishims -I. -I../9_1_1_C_Cpp_Libraries
 
-# C++ library directory (AGC, ADAR1000 Manager)
+# C++ library directory (AGC, ADAR1000 Manager, ADAR1000 BIST)
 CXX_LIB_DIR := ../9_1_1_C_Cpp_Libraries
-CXX_SRCS    := $(CXX_LIB_DIR)/ADAR1000_AGC.cpp $(CXX_LIB_DIR)/ADAR1000_Manager.cpp
-CXX_OBJS    := ADAR1000_AGC.o ADAR1000_Manager.o
+CXX_SRCS    := $(CXX_LIB_DIR)/ADAR1000_AGC.cpp $(CXX_LIB_DIR)/ADAR1000_Manager.cpp $(CXX_LIB_DIR)/ADAR1000_BIST.cpp
+CXX_OBJS    := ADAR1000_AGC.o ADAR1000_Manager.o ADAR1000_BIST.o
 
 # GPS driver source
 GPS_SRC := ../9_1_3_C_Cpp_Code/um982_gps.c
@@ -75,8 +75,9 @@ TESTS_STANDALONE := test_bug12_pa_cal_loop_inverted \
 # Tests that need platform_noos_stm32.o + mocks
 TESTS_WITH_PLATFORM := test_bug11_platform_spi_transmit_only
 
-# C++ tests (AGC outer loop)
-TESTS_WITH_CXX := test_agc_outer_loop
+# C++ tests (AGC outer loop + ADAR1000 bugfixes, PCB Phase LUT & BIST)
+TESTS_WITH_CXX := test_agc_outer_loop \
+                  test_adar1000_fixes_and_bist
 
 # GPS driver tests (need mocks + GPS source + -lm)
 TESTS_GPS := test_um982_gps
@@ -184,10 +185,13 @@ $(TESTS_WITH_PLATFORM): %: %.c $(MOCK_OBJS) $(PLATFORM_OBJ)
 
 # --- C++ object rules ---
 
-ADAR1000_AGC.o: $(CXX_LIB_DIR)/ADAR1000_AGC.cpp $(CXX_LIB_DIR)/ADAR1000_AGC.h
+ADAR1000_AGC.o: $(CXX_LIB_DIR)/ADAR1000_AGC.cpp $(CXX_LIB_DIR)/ADAR1000_AGC.h $(CXX_LIB_DIR)/ADAR1000_Manager.h $(CXX_LIB_DIR)/ADAR1000_PcbPhaseLut.h
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
-ADAR1000_Manager.o: $(CXX_LIB_DIR)/ADAR1000_Manager.cpp $(CXX_LIB_DIR)/ADAR1000_Manager.h
+ADAR1000_Manager.o: $(CXX_LIB_DIR)/ADAR1000_Manager.cpp $(CXX_LIB_DIR)/ADAR1000_Manager.h $(CXX_LIB_DIR)/ADAR1000_PcbPhaseLut.h
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+
+ADAR1000_BIST.o: $(CXX_LIB_DIR)/ADAR1000_BIST.cpp $(CXX_LIB_DIR)/ADAR1000_BIST.h $(CXX_LIB_DIR)/ADAR1000_Manager.h $(CXX_LIB_DIR)/ADAR1000_PcbPhaseLut.h
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # --- C++ test binary rules ---
@@ -195,10 +199,16 @@ ADAR1000_Manager.o: $(CXX_LIB_DIR)/ADAR1000_Manager.cpp $(CXX_LIB_DIR)/ADAR1000_
 test_agc_outer_loop: test_agc_outer_loop.cpp $(CXX_OBJS) $(MOCK_OBJS)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $< $(CXX_OBJS) $(MOCK_OBJS) -o $@
 
-# Convenience target
-.PHONY: test_agc
+test_adar1000_fixes_and_bist: test_adar1000_fixes_and_bist.cpp $(CXX_OBJS) $(MOCK_OBJS)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $< $(CXX_OBJS) $(MOCK_OBJS) -o $@
+
+# Convenience targets
+.PHONY: test_agc test_bist
 test_agc: test_agc_outer_loop
 	./test_agc_outer_loop
+
+test_bist: test_adar1000_fixes_and_bist
+	./test_adar1000_fixes_and_bist
 
 # --- GPS driver rules ---
 

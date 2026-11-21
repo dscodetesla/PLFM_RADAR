@@ -212,6 +212,37 @@ void mock_uart_tx_clear(void);
 HAL_StatusTypeDef HAL_SPI_TransmitReceive(SPI_HandleTypeDef *hspi, uint8_t *pTxData, uint8_t *pRxData, uint16_t Size, uint32_t Timeout);
 HAL_StatusTypeDef HAL_SPI_Transmit(SPI_HandleTypeDef *hspi, uint8_t *pData, uint16_t Size, uint32_t Timeout);
 
+/* ========================= I2C stubs ============================== */
+
+HAL_StatusTypeDef HAL_I2C_Master_Transmit(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+HAL_StatusTypeDef HAL_I2C_Master_Receive(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+
+/* ========================= ADAR1000 SPI1 + I2C1/I2C2 Hardware Sim == */
+
+typedef struct {
+    uint32_t hspi_id;
+    int8_t   asserted_cs_dev; /* 0..3 if PA0..PA3 asserted LOW, else -1 */
+    uint16_t size;
+    uint8_t  tx[4];
+    uint8_t  rx[4];
+} MockSpiFrame;
+
+#define MOCK_SPI_MAX_FRAMES 2048
+extern MockSpiFrame mock_spi_frames[MOCK_SPI_MAX_FRAMES];
+extern int          mock_spi_frame_count;
+
+void    mock_adar_sim_reset(void);
+void    mock_adar_sim_enable(bool enable);
+uint8_t mock_adar_sim_get_reg(uint8_t dev_idx, uint16_t reg_addr);
+void    mock_adar_sim_set_reg(uint8_t dev_idx, uint16_t reg_addr, uint8_t val);
+void    mock_adar_sim_set_base_tx_power_dbm(uint8_t dev_idx, uint8_t ch_1based, float power_dbm);
+void    mock_adar_sim_set_det_override(uint8_t dev_idx, uint8_t ch_1based, int16_t raw_code_or_neg1);
+void    mock_adar_sim_set_temp_raw(uint8_t dev_idx, uint8_t raw_code);
+
+void    mock_i2c_ads7830_set_channel(uint8_t bus_id, uint8_t addr_7bit, uint8_t ch, uint8_t raw_val);
+void    mock_i2c_ads7830_set_ack(uint8_t bus_id, uint8_t addr_7bit, bool ack);
+uint8_t mock_i2c_dac5578_get_channel(uint8_t bus_id, uint8_t addr_7bit, uint8_t ch);
+
 /* ========================= no_os compat layer ===================== */
 
 void no_os_udelay(uint32_t usecs);

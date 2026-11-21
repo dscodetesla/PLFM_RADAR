@@ -310,7 +310,7 @@ int ADF4382A_TriggerTimedSync(ADF4382A_Manager *manager)
     if (!manager || !manager->initialized || manager->sync_method != SYNC_METHOD_TIMED) {
         DIAG_ERR("LO", "TriggerTimedSync REJECTED: init=%s method=%d",
                  (manager && manager->initialized) ? "true" : "false",
-                 manager ? manager->sync_method : -1);
+                 manager ? (int)manager->sync_method : -1);
         return ADF4382A_MANAGER_ERROR_NOT_INIT;
     }
 

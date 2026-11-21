@@ -4,6 +4,7 @@
 
 #include "stm32f7xx_hal.h"
 #include "main.h"
+#include "ADAR1000_PcbPhaseLut.h"
 
 #include <vector>
 #include <memory>
@@ -55,8 +56,10 @@ public:
 
     // Beam Steering
     bool setBeamAngle(float angle_degrees, BeamDirection direction);
-    bool setCustomBeamPattern(const uint8_t phase_settings[16], const uint8_t gain_settings[4], BeamDirection direction);
+    bool setCustomBeamPattern(const uint8_t phase_settings[4], const uint8_t gain_settings[4], BeamDirection direction);
     bool setCustomBeamPattern16(const uint8_t phase_pattern[16], BeamDirection direction);
+    void setPcbPhaseCompensation(bool enable) { pcb_phase_compensation_enabled_ = enable; }
+    bool isPcbPhaseCompensationEnabled() const { return pcb_phase_compensation_enabled_; }
 
     // Beam Sweeping
     void startBeamSweeping();
@@ -73,6 +76,7 @@ public:
 
     // Monitoring and Diagnostics
     float readTemperature(uint8_t deviceIndex);
+    uint8_t readPowerDetector(uint8_t deviceIndex, uint8_t channel);
     bool verifyDeviceCommunication(uint8_t deviceIndex);
     uint8_t readRegister(uint8_t deviceIndex, uint32_t address);
     void writeRegister(uint8_t deviceIndex, uint32_t address, uint8_t value);
@@ -101,6 +105,7 @@ public:
 
     // Configuration
     bool fast_switch_mode_ = false;
+    bool pcb_phase_compensation_enabled_ = true;
     uint32_t switch_settling_time_us_ = 50;
     uint32_t beam_dwell_time_ms_ = 100;
     uint32_t last_switch_time_us_ = 0;
@@ -160,13 +165,15 @@ public:
     void adarWriteConfigA(uint8_t deviceIndex, uint8_t flags, uint8_t broadcast);
     void adarSetRamBypass(uint8_t deviceIndex, uint8_t broadcast);
 
-    // Channel Configuration
+    // Channel Configuration (1-based channel = 1..4)
     void adarSetRxPhase(uint8_t deviceIndex, uint8_t channel, uint8_t phase, uint8_t broadcast);
     void adarSetTxPhase(uint8_t deviceIndex, uint8_t channel, uint8_t phase, uint8_t broadcast);
     void adarSetRxVgaGain(uint8_t deviceIndex, uint8_t channel, uint8_t gain, uint8_t broadcast);
     void adarSetTxVgaGain(uint8_t deviceIndex, uint8_t channel, uint8_t gain, uint8_t broadcast);
+    void adarSetPaBiasOn(uint8_t deviceIndex, uint8_t channel, uint8_t bias_code, uint8_t broadcast);
     void adarSetTxBias(uint8_t deviceIndex, uint8_t broadcast);
     uint8_t adarAdcRead(uint8_t deviceIndex, uint8_t broadcast);
+    uint8_t adarAdcReadMux(uint8_t deviceIndex, uint8_t muxSel, uint8_t broadcast);
     void setTRSwitchPosition(uint8_t deviceIndex, bool tx_mode);
 
 private:
@@ -225,12 +232,29 @@ private:
 #define REG_LNA_BIAS_OFF                   0x04A
 
 // Register Constants
-#define INTERFACE_CONFIG_A_SDO_ACTIVE      ((1 << 4) | (1 << 3))
-#define ADAR1000_ADC_2MHZ_CLK              0x00
-#define ADAR1000_ADC_EN                    0x60
-#define ADAR1000_ADC_ST_CONV               0x70
-#define MEM_CTRL_BIAS_RAM_BYPASS           (1 << 5)
-#define MEM_CTRL_BEAM_RAM_BYPASS           (1 << 6)
-#define LD_WRK_REGS_LDTX_OVERRIDE          (1 << 1)
+#define INTERFACE_CONFIG_A_SDO_ACTIVE      ((1U << 4) | (1U << 3))
+#define ADAR1000_ADC_2MHZ_CLK              0x00U
+#define ADAR1000_ADC_EN                    0x60U
+#define ADAR1000_ADC_ST_CONV_BIT           (1U << 4)
+#define ADAR1000_ADC_ST_CONV               0x70U
+#define ADAR1000_ADC_EOC_MASK              0x01U
+#define MEM_CTRL_BIAS_RAM_BYPASS           (1U << 5)
+#define MEM_CTRL_BEAM_RAM_BYPASS           (1U << 6)
+#define LD_WRK_REGS_LDRX_OVERRIDE          (1U << 0)
+#define LD_WRK_REGS_LDTX_OVERRIDE          (1U << 1)
+
+// 0x030 MISC_ENABLES bit definitions (ADAR1000 Rev. B Table 75, p. 69):
+// Note: Bit 5 (BIAS_EN) is ACTIVE-LOW (0 = PA & LNA bias DACs enabled, 1 = disabled).
+#define MISC_ENABLES_SW_DRV_TR_MODE_SEL    (1U << 7)
+#define MISC_ENABLES_BIAS_CTRL             (1U << 6)
+#define MISC_ENABLES_BIAS_EN_BIT           5U
+#define MISC_ENABLES_BIAS_EN_MASK          (1U << 5)
+#define MISC_ENABLES_LNA_BIAS_OUT_EN_BIT   4U
+#define MISC_ENABLES_LNA_BIAS_OUT_EN       (1U << 4)
+#define MISC_ENABLES_CH1_DET_EN            (1U << 3)
+#define MISC_ENABLES_CH2_DET_EN            (1U << 2)
+#define MISC_ENABLES_CH3_DET_EN            (1U << 1)
+#define MISC_ENABLES_CH4_DET_EN            (1U << 0)
+#define MISC_ENABLES_ALL_DET_EN            0x0FU
 
 #endif // ADAR1000_MANAGER_H

@@ -87,8 +87,10 @@ const uint8_t ADAR1000Manager::VM_Q[128] = {
 // adarSetTxVgaGain().  Do not reintroduce a VM_GAIN[] array.
 
 ADAR1000Manager::ADAR1000Manager() {
-    for (int i = 0; i < 4; ++i) {
-        devices_.push_back(std::make_unique<ADAR1000Device>(i));
+    // Bug 2 fix: Initialize hardware SPI addresses ADDR1:ADDR0 per RADAR_Main_Board.sch:
+    // ADAR1_=0b00 (0), ADAR2_=0b10 (2), ADAR3_=0b01 (1), ADAR4_=0b11 (3).
+    for (uint8_t i = 0; i < kAdarNumDevices; ++i) {
+        devices_.push_back(std::make_unique<ADAR1000Device>(kAdarHwSpiAddress[i]));
     }
 }
 
@@ -127,6 +129,7 @@ bool ADAR1000Manager::powerUpSystem() {
     switchToRXMode();
 
     DIAG_ELAPSED("BF", "powerUpSystem() total", t0);
+    (void)t0;
     const uint8_t success[] = "System Power-Up Sequence Completed Successfully.\r\n";
     HAL_UART_Transmit(&huart3, success, sizeof(success) - 1, 1000);
     return true;
@@ -166,7 +169,7 @@ void ADAR1000Manager::switchToTXMode() {
     DIAG("BF", "Step 4: ADTR1107 -> TX");
     setADTR1107Control(true);
 
-    for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+    for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
         adarWrite(dev, REG_RX_ENABLES, 0x00, BROADCAST_OFF);
         adarWrite(dev, REG_TX_ENABLES, 0x0F, BROADCAST_OFF);
         adarSetTxBias(dev, BROADCAST_OFF);
@@ -194,7 +197,7 @@ void ADAR1000Manager::switchToRXMode() {
     setLNABias(true);
     delayUs(50);
 
-    for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+    for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
         adarWrite(dev, REG_TX_ENABLES, 0x00, BROADCAST_OFF);
         adarWrite(dev, REG_RX_ENABLES, 0x0F, BROADCAST_OFF);
         devices_[dev]->current_mode = BeamDirection::RX;
@@ -207,7 +210,7 @@ void ADAR1000Manager::switchToRXMode() {
 void ADAR1000Manager::fastTXMode() {
     DIAG("BF", "fastTXMode(): ADTR1107 -> TX (no bias sequencing)");
     setADTR1107Control(true);
-    for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+    for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
         adarWrite(dev, REG_RX_ENABLES, 0x00, BROADCAST_OFF);
         adarWrite(dev, REG_TX_ENABLES, 0x0F, BROADCAST_OFF);
         devices_[dev]->current_mode = BeamDirection::TX;
@@ -218,7 +221,7 @@ void ADAR1000Manager::fastTXMode() {
 void ADAR1000Manager::fastRXMode() {
     DIAG("BF", "fastRXMode(): ADTR1107 -> RX (no bias sequencing)");
     setADTR1107Control(false);
-    for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+    for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
         adarWrite(dev, REG_TX_ENABLES, 0x00, BROADCAST_OFF);
         adarWrite(dev, REG_RX_ENABLES, 0x0F, BROADCAST_OFF);
         devices_[dev]->current_mode = BeamDirection::RX;
@@ -242,25 +245,39 @@ void ADAR1000Manager::pulseRXMode() {
 bool ADAR1000Manager::setBeamAngle(float angle_degrees, BeamDirection direction) {
     DIAG("BF", "setBeamAngle(%.1f deg, %s)", (double)angle_degrees,
          direction == BeamDirection::TX ? "TX" : "RX");
-    uint8_t phase_settings[4];
-    calculatePhaseSettings(angle_degrees, phase_settings);
-    DIAG("BF", "  phase[0..3] = %u, %u, %u, %u",
-         phase_settings[0], phase_settings[1], phase_settings[2], phase_settings[3]);
 
-    if (direction == BeamDirection::TX) {
+    const float freq = 10.5e9f;
+    const float c = 3.0e8f;
+    const float wavelength = c / freq;
+    const float element_spacing = wavelength / 2.0f;
+    const float angle_rad = angle_degrees * static_cast<float>(M_PI) / 180.0f;
+    const float phase_shift = (2.0f * static_cast<float>(M_PI) * element_spacing * std::sin(angle_rad)) / wavelength;
+
+    const bool is_tx = (direction == BeamDirection::TX);
+    if (is_tx) {
         setAllDevicesTXMode();
     } else {
         setAllDevicesRXMode();
     }
 
-    for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
-        for (uint8_t ch = 0; ch < 4; ++ch) {
-            if (direction == BeamDirection::TX) {
-                adarSetTxPhase(dev, ch + 1, phase_settings[ch], BROADCAST_OFF);
-                adarSetTxVgaGain(dev, ch + 1, kDefaultTxVgaGain, BROADCAST_OFF);
+    for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
+        for (uint8_t ch = 0; ch < 4U; ++ch) {
+            const uint8_t aperture_idx = static_cast<uint8_t>(dev * 4U + ch);
+            float element_phase = static_cast<float>(aperture_idx) * phase_shift;
+            const float two_pi = 2.0f * static_cast<float>(M_PI);
+            while (element_phase < 0.0f) element_phase += two_pi;
+            while (element_phase >= two_pi) element_phase -= two_pi;
+            uint8_t phase_code = static_cast<uint8_t>((element_phase / two_pi) * 128.0f) & 0x7FU;
+            if (pcb_phase_compensation_enabled_) {
+                phase_code = applyPcbPhaseCompensation7Bit(aperture_idx, phase_code, is_tx);
+            }
+
+            if (is_tx) {
+                adarSetTxPhase(dev, static_cast<uint8_t>(ch + 1U), phase_code, BROADCAST_OFF);
+                adarSetTxVgaGain(dev, static_cast<uint8_t>(ch + 1U), kDefaultTxVgaGain, BROADCAST_OFF);
             } else {
-                adarSetRxPhase(dev, ch + 1, phase_settings[ch], BROADCAST_OFF);
-                adarSetRxVgaGain(dev, ch + 1, kDefaultRxVgaGain, BROADCAST_OFF);
+                adarSetRxPhase(dev, static_cast<uint8_t>(ch + 1U), phase_code, BROADCAST_OFF);
+                adarSetRxVgaGain(dev, static_cast<uint8_t>(ch + 1U), kDefaultRxVgaGain, BROADCAST_OFF);
             }
         }
     }
@@ -268,7 +285,7 @@ bool ADAR1000Manager::setBeamAngle(float angle_degrees, BeamDirection direction)
 }
 
 bool ADAR1000Manager::setCustomBeamPattern(const uint8_t phase_settings[4], const uint8_t gain_settings[4], BeamDirection direction) {
-    for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+    for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
         for (uint8_t ch = 0; ch < 4; ++ch) {
             if (direction == BeamDirection::TX) {
                 adarSetTxPhase(dev, ch + 1, phase_settings[ch], BROADCAST_OFF);
@@ -329,7 +346,7 @@ void ADAR1000Manager::clearBeamSequence(BeamDirection direction) {
 
 // Monitoring and Diagnostics
 float ADAR1000Manager::readTemperature(uint8_t deviceIndex) {
-    if (deviceIndex >= devices_.size() || !devices_[deviceIndex]->initialized) {
+    if (static_cast<size_t>(deviceIndex) >= devices_.size() || !devices_[deviceIndex]->initialized) {
         DIAG_WARN("BF", "readTemperature(dev[%u]) skipped: not initialized", deviceIndex);
         return -273.15f;
     }
@@ -340,8 +357,26 @@ float ADAR1000Manager::readTemperature(uint8_t deviceIndex) {
     return temp_c;
 }
 
+uint8_t ADAR1000Manager::readPowerDetector(uint8_t deviceIndex, uint8_t channel) {
+    if (static_cast<size_t>(deviceIndex) >= devices_.size() || channel < 1U || channel > 4U) {
+        DIAG_ERR("BF", "readPowerDetector: invalid dev=%u or channel=%u (expected 1..4)", deviceIndex, channel);
+        return 0U;
+    }
+
+    // Enable corresponding power detector bit in 0x030 MISC_ENABLES:
+    // Bit 3 = CH1_DET_EN, Bit 2 = CH2_DET_EN, Bit 1 = CH3_DET_EN, Bit 0 = CH4_DET_EN (Table 75 p. 69),
+    // while keeping Bit 5 (BIAS_EN) cleared to 0 (active-low enabled).
+    const uint8_t det_en_mask = static_cast<uint8_t>(1U << (4U - channel));
+    uint8_t misc = adarRead(deviceIndex, REG_MISC_ENABLES);
+    misc = static_cast<uint8_t>((misc | det_en_mask) & ~MISC_ENABLES_BIAS_EN_MASK);
+    adarWrite(deviceIndex, REG_MISC_ENABLES, misc, BROADCAST_OFF);
+
+    // Table 77 p. 70: MUX_SEL[2:0] = 1..4 selects Detector 1..4
+    return adarAdcReadMux(deviceIndex, channel, BROADCAST_OFF);
+}
+
 bool ADAR1000Manager::verifyDeviceCommunication(uint8_t deviceIndex) {
-    if (deviceIndex >= devices_.size()) {
+    if (static_cast<size_t>(deviceIndex) >= devices_.size()) {
         DIAG_ERR("BF", "verifyDeviceComm(dev[%u]): index out of range", deviceIndex);
         return false;
     }
@@ -402,7 +437,7 @@ bool ADAR1000Manager::initializeAllDevices() {
     DIAG_SECTION("BF INIT ALL DEVICES");
 
     // Initialize each ADAR1000
-    for (uint8_t i = 0; i < devices_.size(); ++i) {
+    for (uint8_t i = 0; static_cast<size_t>(i) < devices_.size(); ++i) {
         DIAG("BF", "Initializing ADAR1000 dev[%u]...", i);
         if (!initializeSingleDevice(i)) {
             DIAG_ERR("BF", "initializeSingleDevice(%u) FAILED -- aborting init", i);
@@ -417,7 +452,7 @@ bool ADAR1000Manager::initializeAllDevices() {
 }
 
 bool ADAR1000Manager::initializeSingleDevice(uint8_t deviceIndex) {
-    if (deviceIndex >= devices_.size()) return false;
+    if (static_cast<size_t>(deviceIndex) >= devices_.size()) return false;
 
     DIAG("BF", "  dev[%u] soft reset", deviceIndex);
     adarSoftReset(deviceIndex);
@@ -427,6 +462,9 @@ bool ADAR1000Manager::initializeSingleDevice(uint8_t deviceIndex) {
     adarWriteConfigA(deviceIndex, INTERFACE_CONFIG_A_SDO_ACTIVE, BROADCAST_OFF);
     DIAG("BF", "  dev[%u] set RAM bypass (bias+beam)", deviceIndex);
     adarSetRamBypass(deviceIndex, BROADCAST_OFF);
+
+    // Bug 1 fix: Ensure 0x030 MISC_ENABLES Bit 5 (BIAS_EN) is cleared to 0 (active-low enabled)
+    adarResetBit(deviceIndex, REG_MISC_ENABLES, MISC_ENABLES_BIAS_EN_BIT, BROADCAST_OFF);
 
     // Initialize ADC
     DIAG("BF", "  dev[%u] enable ADC (2MHz clk)", deviceIndex);
@@ -472,7 +510,7 @@ bool ADAR1000Manager::initializeADTR1107Sequence() {
     // Step 5: Set VGG_LNA to 0
     DIAG("BF", "Step 5: VGG_LNA bias -> OFF (0x%02X)", kLnaBiasOff);
     uint8_t lna_bias_voltage = kLnaBiasOff;
-    for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+    for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
         adarWrite(dev, REG_LNA_BIAS_ON, lna_bias_voltage, BROADCAST_OFF);
         adarWrite(dev, REG_LNA_BIAS_OFF, kLnaBiasOff, BROADCAST_OFF);
     }
@@ -488,7 +526,7 @@ bool ADAR1000Manager::initializeADTR1107Sequence() {
     on or off bias registers correspond to a −4.8 V output.*/
     DIAG("BF", "Step 7: VGG_PA -> safe bias 0x%02X (~ -1.75V, PA off)", kPaBiasTxSafe);
     uint8_t safe_pa_bias = kPaBiasTxSafe; // Safe negative voltage (-1.75V) to keep PA off
-    for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+    for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
         adarWrite(dev, REG_PA_CH1_BIAS_ON, safe_pa_bias, BROADCAST_OFF);
         adarWrite(dev, REG_PA_CH2_BIAS_ON, safe_pa_bias, BROADCAST_OFF);
         adarWrite(dev, REG_PA_CH3_BIAS_ON, safe_pa_bias, BROADCAST_OFF);
@@ -508,7 +546,7 @@ bool ADAR1000Manager::initializeADTR1107Sequence() {
     on or off bias registers correspond to a −4.8 V output.*/
     DIAG("BF", "Step 9: VGG_PA -> Idq cal bias 0x%02X (~ -0.24V, target 220mA)", kPaBiasIdqCalibration);
     uint8_t Idq_pa_bias = kPaBiasIdqCalibration; // Safe negative voltage (-0.2447V) to keep PA off
-    for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+    for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
         adarWrite(dev, REG_PA_CH1_BIAS_ON, Idq_pa_bias, BROADCAST_OFF);
         adarWrite(dev, REG_PA_CH2_BIAS_ON, Idq_pa_bias, BROADCAST_OFF);
         adarWrite(dev, REG_PA_CH3_BIAS_ON, Idq_pa_bias, BROADCAST_OFF);
@@ -517,6 +555,7 @@ bool ADAR1000Manager::initializeADTR1107Sequence() {
     HAL_Delay(10);
 
     DIAG_ELAPSED("BF", "ADTR1107 power sequence", t0);
+    (void)t0;
 
     const uint8_t success[] = "ADTR1107 power sequence completed.\r\n";
     HAL_UART_Transmit(&huart3, success, sizeof(success) - 1, 1000);
@@ -530,7 +569,7 @@ bool ADAR1000Manager::setAllDevicesTXMode() {
     setADTR1107Mode(BeamDirection::TX);
 
     // Then configure ADAR1000 for TX
-    for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+    for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
         // Disable RX first
         adarWrite(dev, REG_RX_ENABLES, 0x00, BROADCAST_OFF);
 
@@ -551,7 +590,7 @@ bool ADAR1000Manager::setAllDevicesRXMode() {
     setADTR1107Mode(BeamDirection::RX);
 
     // Then configure ADAR1000 for RX
-    for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+    for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
         // Disable TX first
         adarWrite(dev, REG_TX_ENABLES, 0x00, BROADCAST_OFF);
 
@@ -577,7 +616,7 @@ void ADAR1000Manager::setADTR1107Mode(BeamDirection direction) {
 
         // Step 2: Set LNA bias to safe off value
         DIAG("BF", "  LNA bias -> OFF (0x%02X)", kLnaBiasOff);
-        for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+        for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
             adarWrite(dev, REG_LNA_BIAS_ON, kLnaBiasOff, BROADCAST_OFF); // Turn off LNA bias
         }
         HAL_Delay(5);
@@ -590,7 +629,7 @@ void ADAR1000Manager::setADTR1107Mode(BeamDirection direction) {
         // Step 4: Set PA bias to operational value
         DIAG("BF", "  PA bias -> operational (0x%02X)", kPaBiasOperational);
         uint8_t operational_pa_bias = kPaBiasOperational; // Maximum bias for full power
-        for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+        for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
             adarWrite(dev, REG_PA_CH1_BIAS_ON, operational_pa_bias, BROADCAST_OFF);
             adarWrite(dev, REG_PA_CH2_BIAS_ON, operational_pa_bias, BROADCAST_OFF);
             adarWrite(dev, REG_PA_CH3_BIAS_ON, operational_pa_bias, BROADCAST_OFF);
@@ -598,11 +637,13 @@ void ADAR1000Manager::setADTR1107Mode(BeamDirection direction) {
         }
         HAL_Delay(5);
 
-        // Step 5: Set TR switch to TX mode
-        DIAG("BF", "  TR switch -> TX (TR_SOURCE=1, BIAS_EN)");
-        for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+        // Step 5: Set TR switch to TX mode and enable bias DACs
+        // Bug 1 fix (ADAR1000 Rev. B Table 75, p. 69): 0x030 Bit 5 BIAS_EN is active-low
+        // (0 = PA & LNA bias DACs enabled, 1 = disabled). Clear Bit 5 to 0!
+        DIAG("BF", "  TR switch -> TX (TR_SOURCE=1, BIAS_EN=0 active-low enabled)");
+        for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
             adarSetBit(dev, REG_SW_CONTROL, 2, BROADCAST_OFF); // TR_SOURCE = 1 (TX)
-            adarSetBit(dev, REG_MISC_ENABLES, 5, BROADCAST_OFF); // BIAS_EN
+            adarResetBit(dev, REG_MISC_ENABLES, MISC_ENABLES_BIAS_EN_BIT, BROADCAST_OFF); // BIAS_EN = 0 (enabled)
         }
         DIAG("BF", "  ADTR1107 TX mode complete");
 
@@ -619,7 +660,7 @@ void ADAR1000Manager::setADTR1107Mode(BeamDirection direction) {
         // Step 2: Set PA bias to safe negative voltage
         DIAG("BF", "  PA bias -> safe (0x%02X)", kPaBiasRxSafe);
         uint8_t safe_pa_bias = kPaBiasRxSafe;
-        for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+        for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
             adarWrite(dev, REG_PA_CH1_BIAS_ON, safe_pa_bias, BROADCAST_OFF);
             adarWrite(dev, REG_PA_CH2_BIAS_ON, safe_pa_bias, BROADCAST_OFF);
             adarWrite(dev, REG_PA_CH3_BIAS_ON, safe_pa_bias, BROADCAST_OFF);
@@ -635,16 +676,17 @@ void ADAR1000Manager::setADTR1107Mode(BeamDirection direction) {
         // Step 4: Set LNA bias to operational value
         DIAG("BF", "  LNA bias -> operational (0x%02X)", kLnaBiasOperational);
         uint8_t operational_lna_bias = kLnaBiasOperational;
-        for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+        for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
             adarWrite(dev, REG_LNA_BIAS_ON, operational_lna_bias, BROADCAST_OFF);
         }
         HAL_Delay(5);
 
-        // Step 5: Set TR switch to RX mode
-        DIAG("BF", "  TR switch -> RX (TR_SOURCE=0, LNA_BIAS_OUT_EN)");
-        for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+        // Step 5: Set TR switch to RX mode and ensure bias DACs enabled (BIAS_EN=0)
+        DIAG("BF", "  TR switch -> RX (TR_SOURCE=0, BIAS_EN=0, LNA_BIAS_OUT_EN=1)");
+        for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
             adarResetBit(dev, REG_SW_CONTROL, 2, BROADCAST_OFF); // TR_SOURCE = 0 (RX)
-            adarSetBit(dev, REG_MISC_ENABLES, 4, BROADCAST_OFF); // LNA_BIAS_OUT_EN
+            adarResetBit(dev, REG_MISC_ENABLES, MISC_ENABLES_BIAS_EN_BIT, BROADCAST_OFF); // BIAS_EN = 0 (enabled)
+            adarSetBit(dev, REG_MISC_ENABLES, MISC_ENABLES_LNA_BIAS_OUT_EN_BIT, BROADCAST_OFF); // LNA_BIAS_OUT_EN = 1
         }
         DIAG("BF", "  ADTR1107 RX mode complete");
     }
@@ -653,7 +695,7 @@ void ADAR1000Manager::setADTR1107Mode(BeamDirection direction) {
 void ADAR1000Manager::setADTR1107Control(bool tx_mode) {
     DIAG("BF", "setADTR1107Control(%s): setting TR switch on all %u devices, settling %lu us",
          tx_mode ? "TX" : "RX", (unsigned)devices_.size(), (unsigned long)switch_settling_time_us_);
-    for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+    for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
         setTRSwitchPosition(dev, tx_mode);
     }
     delayUs(switch_settling_time_us_);
@@ -669,15 +711,20 @@ void ADAR1000Manager::setTRSwitchPosition(uint8_t deviceIndex, bool tx_mode) {
     }
 }
 
-// Add the new public method
+// Add the new public method (with optional MainBoard PCB trace phase LUT compensation)
 bool ADAR1000Manager::setCustomBeamPattern16(const uint8_t phase_pattern[16], BeamDirection direction) {
-    for (uint8_t dev = 0; dev < 4; ++dev) {
-        for (uint8_t ch = 0; ch < 4; ++ch) {
-            uint8_t phase = phase_pattern[dev * 4 + ch];
-            if (direction == BeamDirection::TX) {
-                adarSetTxPhase(dev, ch + 1, phase, BROADCAST_OFF);
+    const bool is_tx = (direction == BeamDirection::TX);
+    for (uint8_t dev = 0; dev < kAdarNumDevices; ++dev) {
+        for (uint8_t ch = 0; ch < kAdarChannelsPerDevice; ++ch) {
+            const uint8_t aperture_idx = static_cast<uint8_t>(dev * kAdarChannelsPerDevice + ch);
+            uint8_t phase = static_cast<uint8_t>(phase_pattern[aperture_idx] & 0x7FU);
+            if (pcb_phase_compensation_enabled_) {
+                phase = applyPcbPhaseCompensation7Bit(aperture_idx, phase, is_tx);
+            }
+            if (is_tx) {
+                adarSetTxPhase(dev, static_cast<uint8_t>(ch + 1U), phase, BROADCAST_OFF);
             } else {
-                adarSetRxPhase(dev, ch + 1, phase, BROADCAST_OFF);
+                adarSetRxPhase(dev, static_cast<uint8_t>(ch + 1U), phase, BROADCAST_OFF);
             }
         }
     }
@@ -712,7 +759,7 @@ void ADAR1000Manager::setPABias(bool enable) {
     uint8_t pa_bias = enable ? kPaBiasOperational : kPaBiasRxSafe; // Operational vs safe bias
     DIAG("BF", "setPABias(%s): bias=0x%02X", enable ? "ON" : "OFF", pa_bias);
 
-    for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+    for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
         adarWrite(dev, REG_PA_CH1_BIAS_ON, pa_bias, BROADCAST_OFF);
         adarWrite(dev, REG_PA_CH2_BIAS_ON, pa_bias, BROADCAST_OFF);
         adarWrite(dev, REG_PA_CH3_BIAS_ON, pa_bias, BROADCAST_OFF);
@@ -724,7 +771,7 @@ void ADAR1000Manager::setLNABias(bool enable) {
     uint8_t lna_bias = enable ? kLnaBiasOperational : kLnaBiasOff; // Operational vs off
     DIAG("BF", "setLNABias(%s): bias=0x%02X", enable ? "ON" : "OFF", lna_bias);
 
-    for (uint8_t dev = 0; dev < devices_.size(); ++dev) {
+    for (uint8_t dev = 0; static_cast<size_t>(dev) < devices_.size(); ++dev) {
         adarWrite(dev, REG_LNA_BIAS_ON, lna_bias, BROADCAST_OFF);
     }
 }
@@ -756,7 +803,7 @@ void ADAR1000Manager::calculatePhaseSettings(float angle_degrees, uint8_t phase_
 
 bool ADAR1000Manager::performSystemCalibration() {
     DIAG_SECTION("BF SYSTEM CALIBRATION");
-    for (uint8_t i = 0; i < devices_.size(); ++i) {
+    for (uint8_t i = 0; static_cast<size_t>(i) < devices_.size(); ++i) {
         DIAG("BF", "Calibration: verifying dev[%u] communication...", i);
         if (!verifyDeviceCommunication(i)) {
             DIAG_ERR("BF", "Calibration FAILED at dev[%u]", i);
@@ -788,23 +835,24 @@ uint32_t ADAR1000Manager::spiTransfer(uint8_t* txData, uint8_t* rxData, uint32_t
 }
 
 void ADAR1000Manager::setChipSelect(uint8_t deviceIndex, bool state) {
-    if (deviceIndex >= devices_.size()) return;
+    if (static_cast<size_t>(deviceIndex) >= devices_.size()) return;
     HAL_GPIO_WritePin(CHIP_SELECTS[deviceIndex].port,
                       CHIP_SELECTS[deviceIndex].pin,
                       state ? GPIO_PIN_RESET : GPIO_PIN_SET);
 }
 
 void ADAR1000Manager::adarWrite(uint8_t deviceIndex, uint32_t mem_addr, uint8_t data, uint8_t broadcast) {
+    if (static_cast<size_t>(deviceIndex) >= devices_.size()) return;
     uint8_t instruction[3];
 
     if (broadcast) {
-        instruction[0] = 0x08;
+        instruction[0] = 0x08U;
     } else {
-        instruction[0] = ((devices_[deviceIndex]->dev_addr & 0x03) << 5);
+        instruction[0] = static_cast<uint8_t>((devices_[deviceIndex]->dev_addr & 0x03U) << 5U);
     }
 
-    instruction[0] |= (0x1F00 & mem_addr) >> 8;
-    instruction[1] = (0xFF & mem_addr);
+    instruction[0] |= static_cast<uint8_t>((0x1F00U & mem_addr) >> 8U);
+    instruction[1] = static_cast<uint8_t>(0xFFU & mem_addr);
     instruction[2] = data;
 
     setChipSelect(deviceIndex, true);
@@ -813,16 +861,17 @@ void ADAR1000Manager::adarWrite(uint8_t deviceIndex, uint32_t mem_addr, uint8_t 
 }
 
 uint8_t ADAR1000Manager::adarRead(uint8_t deviceIndex, uint32_t mem_addr) {
+    if (static_cast<size_t>(deviceIndex) >= devices_.size()) return 0U;
     uint8_t instruction[3] = {0};
     uint8_t rx_buffer[3] = {0};
 
     // Set SDO active
     adarWrite(deviceIndex, REG_INTERFACE_CONFIG_A, INTERFACE_CONFIG_A_SDO_ACTIVE, 0);
 
-    instruction[0] = 0x80 | ((devices_[deviceIndex]->dev_addr & 0x03) << 5);
-    instruction[0] |= ((0xff00 & mem_addr) >> 8);
-    instruction[1] = (0xff & mem_addr);
-    instruction[2] = 0x00;
+    instruction[0] = static_cast<uint8_t>(0x80U | ((devices_[deviceIndex]->dev_addr & 0x03U) << 5U));
+    instruction[0] |= static_cast<uint8_t>((0x1F00U & mem_addr) >> 8U);
+    instruction[1] = static_cast<uint8_t>(0xFFU & mem_addr);
+    instruction[2] = 0x00U;
 
     setChipSelect(deviceIndex, true);
     spiTransfer(instruction, rx_buffer, sizeof(instruction));
@@ -835,23 +884,26 @@ uint8_t ADAR1000Manager::adarRead(uint8_t deviceIndex, uint32_t mem_addr) {
 }
 
 void ADAR1000Manager::adarSetBit(uint8_t deviceIndex, uint32_t mem_addr, uint8_t bit, uint8_t broadcast) {
+    if (bit > 7U) return;
     uint8_t temp = adarRead(deviceIndex, mem_addr);
-    uint8_t data = temp | (1 << bit);
+    uint8_t data = static_cast<uint8_t>(temp | (1U << bit));
     adarWrite(deviceIndex, mem_addr, data, broadcast);
 }
 
 void ADAR1000Manager::adarResetBit(uint8_t deviceIndex, uint32_t mem_addr, uint8_t bit, uint8_t broadcast) {
+    if (bit > 7U) return;
     uint8_t temp = adarRead(deviceIndex, mem_addr);
-    uint8_t data = temp & ~(1 << bit);
+    uint8_t data = static_cast<uint8_t>(temp & ~(1U << bit));
     adarWrite(deviceIndex, mem_addr, data, broadcast);
 }
 
 void ADAR1000Manager::adarSoftReset(uint8_t deviceIndex) {
+    if (static_cast<size_t>(deviceIndex) >= devices_.size()) return;
     DIAG("BF", "adarSoftReset(dev[%u]): addr=0x%02X", deviceIndex, devices_[deviceIndex]->dev_addr);
     uint8_t instruction[3];
-    instruction[0] = ((devices_[deviceIndex]->dev_addr & 0x03) << 5);
-    instruction[1] = 0x00;
-    instruction[2] = 0x81;
+    instruction[0] = static_cast<uint8_t>((devices_[deviceIndex]->dev_addr & 0x03U) << 5U);
+    instruction[1] = 0x00U;
+    instruction[2] = 0x81U;
 
     setChipSelect(deviceIndex, true);
     spiTransfer(instruction, nullptr, sizeof(instruction));
@@ -863,68 +915,104 @@ void ADAR1000Manager::adarWriteConfigA(uint8_t deviceIndex, uint8_t flags, uint8
 }
 
 void ADAR1000Manager::adarSetRamBypass(uint8_t deviceIndex, uint8_t broadcast) {
-    uint8_t data = (MEM_CTRL_BIAS_RAM_BYPASS | MEM_CTRL_BEAM_RAM_BYPASS);
+    uint8_t data = static_cast<uint8_t>(MEM_CTRL_BIAS_RAM_BYPASS | MEM_CTRL_BEAM_RAM_BYPASS);
     adarWrite(deviceIndex, REG_MEM_CTL, data, broadcast);
 }
 
+// Bug 3 fix: Safe 1-based channel indexing (channel = 1..4 -> offset = channel - 1)
+// across all RX/TX Phase, VGA Gain, and PA Bias methods so channel=4 maps to CH4
+// (e.g. 0x01F CH4_TX_GAIN) instead of wrapping via (channel & 0x03) onto CH1 (0x01C).
 void ADAR1000Manager::adarSetRxPhase(uint8_t deviceIndex, uint8_t channel, uint8_t phase, uint8_t broadcast) {
-    uint8_t i_val = VM_I[phase % 128];
-    uint8_t q_val = VM_Q[phase % 128];
+    if (static_cast<size_t>(deviceIndex) >= devices_.size() || channel < 1U || channel > 4U) {
+        DIAG_ERR("BF", "adarSetRxPhase: out-of-range dev=%u channel=%u (expected 1..4)", deviceIndex, channel);
+        return;
+    }
+    const uint32_t ch_offset = static_cast<uint32_t>(channel - 1U);
+    const uint8_t i_val = VM_I[phase % 128U];
+    const uint8_t q_val = VM_Q[phase % 128U];
 
-    uint32_t mem_addr_i = REG_CH1_RX_PHS_I + (channel & 0x03) * 2;
-    uint32_t mem_addr_q = REG_CH1_RX_PHS_Q + (channel & 0x03) * 2;
+    const uint32_t mem_addr_i = REG_CH1_RX_PHS_I + ch_offset * 2U;
+    const uint32_t mem_addr_q = REG_CH1_RX_PHS_Q + ch_offset * 2U;
 
     adarWrite(deviceIndex, mem_addr_i, i_val, broadcast);
     adarWrite(deviceIndex, mem_addr_q, q_val, broadcast);
-    adarWrite(deviceIndex, REG_LOAD_WORKING, 0x1, broadcast);
+    adarWrite(deviceIndex, REG_LOAD_WORKING, LD_WRK_REGS_LDRX_OVERRIDE, broadcast);
 }
 
 void ADAR1000Manager::adarSetTxPhase(uint8_t deviceIndex, uint8_t channel, uint8_t phase, uint8_t broadcast) {
-    uint8_t i_val = VM_I[phase % 128];
-    uint8_t q_val = VM_Q[phase % 128];
+    if (static_cast<size_t>(deviceIndex) >= devices_.size() || channel < 1U || channel > 4U) {
+        DIAG_ERR("BF", "adarSetTxPhase: out-of-range dev=%u channel=%u (expected 1..4)", deviceIndex, channel);
+        return;
+    }
+    const uint32_t ch_offset = static_cast<uint32_t>(channel - 1U);
+    const uint8_t i_val = VM_I[phase % 128U];
+    const uint8_t q_val = VM_Q[phase % 128U];
 
-    uint32_t mem_addr_i = REG_CH1_TX_PHS_I + (channel & 0x03) * 2;
-    uint32_t mem_addr_q = REG_CH1_TX_PHS_Q + (channel & 0x03) * 2;
+    const uint32_t mem_addr_i = REG_CH1_TX_PHS_I + ch_offset * 2U;
+    const uint32_t mem_addr_q = REG_CH1_TX_PHS_Q + ch_offset * 2U;
 
     adarWrite(deviceIndex, mem_addr_i, i_val, broadcast);
     adarWrite(deviceIndex, mem_addr_q, q_val, broadcast);
-    adarWrite(deviceIndex, REG_LOAD_WORKING, 0x1, broadcast);
+    adarWrite(deviceIndex, REG_LOAD_WORKING, LD_WRK_REGS_LDTX_OVERRIDE, broadcast);
 }
 
 void ADAR1000Manager::adarSetRxVgaGain(uint8_t deviceIndex, uint8_t channel, uint8_t gain, uint8_t broadcast) {
-    uint32_t mem_addr = REG_CH1_RX_GAIN + (channel & 0x03);
+    if (static_cast<size_t>(deviceIndex) >= devices_.size() || channel < 1U || channel > 4U) {
+        DIAG_ERR("BF", "adarSetRxVgaGain: out-of-range dev=%u channel=%u (expected 1..4)", deviceIndex, channel);
+        return;
+    }
+    const uint32_t mem_addr = REG_CH1_RX_GAIN + static_cast<uint32_t>(channel - 1U);
     adarWrite(deviceIndex, mem_addr, gain, broadcast);
-    adarWrite(deviceIndex, REG_LOAD_WORKING, 0x1, broadcast);
+    adarWrite(deviceIndex, REG_LOAD_WORKING, LD_WRK_REGS_LDRX_OVERRIDE, broadcast);
 }
 
 void ADAR1000Manager::adarSetTxVgaGain(uint8_t deviceIndex, uint8_t channel, uint8_t gain, uint8_t broadcast) {
-    uint32_t mem_addr = REG_CH1_TX_GAIN + (channel & 0x03);
+    if (static_cast<size_t>(deviceIndex) >= devices_.size() || channel < 1U || channel > 4U) {
+        DIAG_ERR("BF", "adarSetTxVgaGain: out-of-range dev=%u channel=%u (expected 1..4)", deviceIndex, channel);
+        return;
+    }
+    const uint32_t mem_addr = REG_CH1_TX_GAIN + static_cast<uint32_t>(channel - 1U);
     adarWrite(deviceIndex, mem_addr, gain, broadcast);
     adarWrite(deviceIndex, REG_LOAD_WORKING, LD_WRK_REGS_LDTX_OVERRIDE, broadcast);
+}
+
+void ADAR1000Manager::adarSetPaBiasOn(uint8_t deviceIndex, uint8_t channel, uint8_t bias_code, uint8_t broadcast) {
+    if (static_cast<size_t>(deviceIndex) >= devices_.size() || channel < 1U || channel > 4U) {
+        DIAG_ERR("BF", "adarSetPaBiasOn: out-of-range dev=%u channel=%u (expected 1..4)", deviceIndex, channel);
+        return;
+    }
+    const uint32_t mem_addr = REG_PA_CH1_BIAS_ON + static_cast<uint32_t>(channel - 1U);
+    adarWrite(deviceIndex, mem_addr, bias_code, broadcast);
 }
 
 void ADAR1000Manager::adarSetTxBias(uint8_t deviceIndex, uint8_t broadcast) {
     adarWrite(deviceIndex, REG_BIAS_CURRENT_TX, kTxBiasCurrent, broadcast);
     adarWrite(deviceIndex, REG_BIAS_CURRENT_TX_DRV, kTxDriverBiasCurrent, broadcast);
-    adarWrite(deviceIndex, REG_LOAD_WORKING, 0x2, broadcast);
+    adarWrite(deviceIndex, REG_LOAD_WORKING, LD_WRK_REGS_LDTX_OVERRIDE, broadcast);
+}
+
+uint8_t ADAR1000Manager::adarAdcReadMux(uint8_t deviceIndex, uint8_t muxSel, uint8_t broadcast) {
+    if (static_cast<size_t>(deviceIndex) >= devices_.size()) return 0U;
+    const uint8_t adc_ctrl = static_cast<uint8_t>(
+        ADAR1000_ADC_2MHZ_CLK | ADAR1000_ADC_EN | ADAR1000_ADC_ST_CONV_BIT | ((muxSel & 0x07U) << 1U));
+    adarWrite(deviceIndex, REG_ADC_CONTROL, adc_ctrl, broadcast);
+
+    uint32_t t0 = HAL_GetTick();
+    uint32_t polls = 0;
+    while (!(adarRead(deviceIndex, REG_ADC_CONTROL) & ADAR1000_ADC_EOC_MASK)) {
+        polls++;
+        if (HAL_GetTick() - t0 > 100U) {
+            DIAG_ERR("BF", "adarAdcReadMux(dev[%u], mux=%u): ADC conversion TIMEOUT after %lu ms, %lu polls",
+                     deviceIndex, muxSel, (unsigned long)(HAL_GetTick() - t0), (unsigned long)polls);
+            return 0U;
+        }
+    }
+    DIAG("BF", "adarAdcReadMux(dev[%u], mux=%u): conversion done in %lu ms (%lu polls)",
+         deviceIndex, muxSel, (unsigned long)(HAL_GetTick() - t0), (unsigned long)polls);
+
+    return adarRead(deviceIndex, REG_ADC_OUT);
 }
 
 uint8_t ADAR1000Manager::adarAdcRead(uint8_t deviceIndex, uint8_t broadcast) {
-    adarWrite(deviceIndex, REG_ADC_CONTROL, ADAR1000_ADC_ST_CONV, broadcast);
-
-    // Wait for conversion -- WARNING: no timeout, can hang if ADC never completes
-    uint32_t t0 = HAL_GetTick();
-    uint32_t polls = 0;
-    while (!(adarRead(deviceIndex, REG_ADC_CONTROL) & 0x01)) {
-        polls++;
-        if (HAL_GetTick() - t0 > 100) {
-            DIAG_ERR("BF", "adarAdcRead(dev[%u]): ADC conversion TIMEOUT after %lu ms, %lu polls",
-                     deviceIndex, (unsigned long)(HAL_GetTick() - t0), (unsigned long)polls);
-            return 0;
-        }
-    }
-    DIAG("BF", "adarAdcRead(dev[%u]): conversion done in %lu ms (%lu polls)",
-         deviceIndex, (unsigned long)(HAL_GetTick() - t0), (unsigned long)polls);
-
-    return adarRead(deviceIndex, REG_ADC_OUT);
+    return adarAdcReadMux(deviceIndex, 0x00U, broadcast);
 }
