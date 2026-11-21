@@ -1,0 +1,8 @@
+Host: desk-tyan (100.114.101.40)
+Binary: /home/user/AMDDesignTools/2026.1/Vivado/bin/vivado
+Version: Vivado v2026.1 (64-bit)
+Command: vivado -mode batch -nolog -nojournal -eval "puts [llength [get_parts]]; puts [get_parts xc7a50tftg256-2]"
+Result:
+total_parts=5893
+matched_part=xc7a50tftg256-2
+Status: PASS [V]

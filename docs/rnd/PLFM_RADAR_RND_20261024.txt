@@ -67,3 +67,16 @@ Vivado 2026.1 знайшов xc7a50tftg256-2 і відкрив конфігур�
 
 Контрольна точка 24.10.2026
 Поточний стан і зміни ітерації 3 включено в окрему архівну гілку checkpoint/rnd-2026-10-24. Незавершений CI та відкриті технічні питання збережено. Записи вище описують стан до цієї контрольної точки.
+
+================================================================================
+STRUCTURED ARCHIVAL INVESTIGATION INDEX (AERIS-10N NEXUS R0.1, 2026-10-24)
+================================================================================
+- [Investigation #9] FPGA_DAC_CLOCK (clk_120m_dac, 120 MHz) Pin & Routing Audit [Proposal / ?]:
+  C13 (IO_L12N_T1_MRCC_15, SCH/BRD) vs D13 (IO_L12P_T1_MRCC_15, XDC) ECO candidate.
+- [Investigation #10] FT_CLKOUT (60 MHz FT2232H FIFO Clock) Pin & Timing Audit [Proposal / ?]:
+  C4 (IO_L12N_T1_MRCC_35, SCH/BRD) vs D4 (IO_L12P_T1_MRCC_35, XDC) ECO candidate.
+- [Investigation #11] FPGA Bank 14 Mixed-Voltage & LVDS_25 Electrical Audit [?]:
+  Bank 14 VCCO=3.3V, LVDS_25 DIFF_TERM FALSE (external 100R R2..R12), T5 adc_pwdn LVCMOS33 via R36=830R/R37=1k.
+- [Investigation #12] Full Native Vivado 2026.1 HDL Implementation & Bitstream Gate (depends on #9, #10, #11) [?].
+- [Investigation #13] Native CAD ERC/DRC Verification of PowerBoard X36 (independent) [?].
+- [Investigation #14] MainBoard XTAL3 Footprint & BOM Component Reconciliation (independent) [?].

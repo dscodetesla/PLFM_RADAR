@@ -1,0 +1,8 @@
+Host: desk-tyan (100.114.101.40)
+Binary: /home/user/AMDDesignTools/2026.1/Vivado/bin/vivado
+Test: Synthetic 1-FF top module without explicit IOSTANDARD / PACKAGE_PIN under production_gate.tcl
+Command: source docs/manufacturing/evidence/production_gate.tcl; plfm_require_production_checks
+Result:
+ERROR: [PLFM_GATE] Violation NSTD-1 on port clk (IOSTANDARD=DEFAULT)
+Exit Code: 1 (Expected negative test rejection)
+Status: PASS [V]

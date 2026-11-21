@@ -1,0 +1,64 @@
+{
+  "fpga_part": "xc7a50tftg256-2",
+  "status": "INVESTIGATION_REQUIRED",
+  "firmware_flash_status": "NOT_FOR_FLASH",
+  "dependency_order": {
+    "first_wave": [
+      "#9",
+      "#10",
+      "#11"
+    ],
+    "after_first_wave": [
+      "#12"
+    ],
+    "independent": [
+      "#13",
+      "#14"
+    ]
+  },
+  "clock_candidates": [
+    {
+      "signal": "FPGA_DAC_CLOCK",
+      "net": "clk_120m_dac",
+      "frequency_mhz": 120.0,
+      "sch_brd_pin": "C13",
+      "sch_brd_pin_type": "IO_L12N_T1_MRCC_15 (N-side MRCC, Bank 15)",
+      "xdc_pin": "D13",
+      "xdc_pin_type": "IO_L12P_T1_MRCC_15 (P-side MRCC, Bank 15)",
+      "classification": "ECO_CANDIDATE",
+      "investigation_id": "#9",
+      "evidence_tag": "[?]",
+      "resolved": false,
+      "notes": "C13->D13 is an ECO candidate, not an approved PCB change. Requires physical BGA escape routing, MRCC rule, and timing audit."
+    },
+    {
+      "signal": "FT_CLKOUT",
+      "net": "ft_clkout_60m",
+      "frequency_mhz": 60.0,
+      "sch_brd_pin": "C4",
+      "sch_brd_pin_type": "IO_L12N_T1_MRCC_35 (N-side MRCC, Bank 35)",
+      "candidate_pin": "D4",
+      "candidate_pin_type": "IO_L12P_T1_MRCC_35 (P-side MRCC, Bank 35)",
+      "classification": "ECO_CANDIDATE",
+      "investigation_id": "#10",
+      "evidence_tag": "[?]",
+      "resolved": false,
+      "notes": "C4->D4 is an ECO candidate under separate investigation #10. Absence of contactref on D4 in XML does not guarantee physical BGA routability."
+    }
+  ],
+  "bank14_audit": {
+    "bank": 14,
+    "vcco_volts": 3.3,
+    "lvds_inputs": "LVDS_25 (ADC differential pairs)",
+    "single_ended_pin": "T5 (IO_L23N_T3_A02_D18_14, adc_pwdn)",
+    "drc_codes": [
+      "BIVC-1",
+      "PLIO-9"
+    ],
+    "investigation_id": "#11",
+    "evidence_tag": "[?]",
+    "resolved": false,
+    "notes": "Requires electrical audit of VCCO=3.3V vs LVDS_25 DIFF_TERM and T5 adc_pwdn divider tolerances/VOH/absmax before running full Vivado build (#12)."
+  },
+  "terminology_clean": true
+}

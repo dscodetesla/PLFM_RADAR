@@ -5,22 +5,22 @@
  *
  * 50T Production Wrapper for radar_system_top
  *
- * The XC7A50T-FTG256 has only 69 usable IO pins, but radar_system_top
- * declares many port bits (including FT601 USB 3.0, debug outputs, and
+ * The XC7A50T-FTG256 has only 69 usable IO pins, whereas radar_system_top
+ * declares additional port bits (including FT601 USB 3.0, debug outputs, and
  * status signals that have no physical connections on the 50T board).
  *
- * This wrapper exposes the physically-connected ports and ties off unused
+ * This wrapper exposes all physically-connected ports and ties off unused
  * inputs. Unused outputs remain internally connected so the full radar
- * pipeline is preserved in the netlist.
+ * pipeline is preserved in the synthesized netlist.
  *
  * USB: FT2232H (USB 2.0, 8-bit, 245 Synchronous FIFO mode)
  *   - USB_MODE=1 selects the FT2232H interface in radar_system_top
- *   - FT2232H CLKOUT (60 MHz) connected to ft601_clk_in (shared clock port)
- *   - 15 signals on Bank 35 (VCCO=3.3V, LVCMOS33)
+ *   - FT2232H CLKOUT (60 MHz) connects to ft601_clk_in (shared clock port)
+ *   - 15 signals on Bank 35 (VCCO=3.3V, LVCMOS33; P-side MRCC ECO candidate D4)
  */
 
 module radar_system_top_50t (
-    // ===== System Clocks (Bank 15: 3.3V) =====
+    // ===== System Clocks (Bank 15: 3.3V; clk_120m_dac P-side MRCC candidate D13) =====
     input wire clk_100m,
     input wire clk_120m_dac,
     input wire reset_n,
@@ -55,7 +55,7 @@ module radar_system_top_50t (
     output wire stm32_cs_adar1_1v8, stm32_cs_adar2_1v8,
     output wire stm32_cs_adar3_1v8, stm32_cs_adar4_1v8,
 
-    // ===== ADC Interface (Bank 14: LVDS_25) =====
+    // ===== ADC Interface (Bank 14: VCCO=3.3V, LVDS_25 DIFF_TERM=FALSE + LVCMOS33 T5) =====
     input wire [7:0] adc_d_p,
     input wire [7:0] adc_d_n,
     input wire adc_dco_p,
@@ -69,7 +69,7 @@ module radar_system_top_50t (
     input wire stm32_mixers_enable,
 
     // ===== FT2232H USB 2.0 Interface (Bank 35: 3.3V) =====
-    input wire ft_clkout,             // 60 MHz from FT2232H CLKOUT (MRCC pin C4)
+    input wire ft_clkout,             // 60 MHz FT2232H CLKOUT (P-side MRCC candidate D4; PCB C4)
     inout wire [7:0] ft_data,         // 8-bit bidirectional data bus
     input wire ft_rxf_n,              // RX FIFO not empty (active low)
     input wire ft_txe_n,              // TX FIFO not full (active low)
@@ -78,10 +78,10 @@ module radar_system_top_50t (
     output wire ft_oe_n,              // Output enable / bus direction
     output wire ft_siwu,              // Send Immediate / WakeUp
 
-    // ===== FPGA→STM32 GPIO (Bank 15: 3.3V) =====
-    output wire gpio_dig5,            // DIG_5 (H11→PD13): AGC saturation flag
-    output wire gpio_dig6,            // DIG_6 (G12→PD14): reserved
-    output wire gpio_dig7             // DIG_7 (H12→PD15): reserved
+    // ===== FPGA->STM32 GPIO (Bank 15: 3.3V) =====
+    output wire gpio_dig5,            // DIG_5 (H11->PD13): AGC saturation flag
+    output wire gpio_dig6,            // DIG_6 (G12->PD14): AGC enable mirror
+    output wire gpio_dig7             // DIG_7 (H12->PD15): reserved
 );
 
     // ===== Tie-off wires for unconstrained FT601 inputs (inactive with USB_MODE=1) =====
@@ -121,7 +121,7 @@ module radar_system_top_50t (
         // ----- Clocks & Reset -----
         .clk_100m               (clk_100m),
         .clk_120m_dac           (clk_120m_dac),
-        .ft601_clk_in           (ft_clkout),         // FT2232H 60 MHz CLKOUT → shared USB clock port
+        .ft601_clk_in           (ft_clkout),         // FT2232H 60 MHz CLKOUT -> shared USB clock port
         .reset_n                (reset_n),
 
         // ----- DAC -----
@@ -214,7 +214,7 @@ module radar_system_top_50t (
         .dbg_range_bin          (dbg_range_bin_nc),
         .system_status          (system_status_nc),
 
-        // ----- FPGA→STM32 GPIO (DIG_5..DIG_7) -----
+        // ----- FPGA->STM32 GPIO (DIG_5..DIG_7) -----
         .gpio_dig5              (gpio_dig5),
         .gpio_dig6              (gpio_dig6),
         .gpio_dig7              (gpio_dig7)
